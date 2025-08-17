@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Dojo.Starknet;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -103,6 +104,7 @@ public class Enemy : MonoBehaviour
         agent.updateRotation = false; // Disable automatic rotation to control it manually
         StartCoroutine(FixRotationNextFrame());
         StartCoroutine(SelectingPlayer());
+
     }
     private IEnumerator FixRotationNextFrame()
     {
@@ -121,7 +123,7 @@ public class Enemy : MonoBehaviour
     //     if (VRFResultRouter.Instance != null)
     //         VRFResultRouter.Instance.OnVRFResult -= OnVRFResult;
     // }
-    void Start()
+    private async void Start()
     {
         //Debug.Log("zzzzzzzzzzzzzzzzzzzzzzzzzz");
         //Debug.Log("qwertyuiop " + agent.updateRotation);
@@ -161,9 +163,28 @@ public class Enemy : MonoBehaviour
         StateMachine.Initialize(IdleState);
         //Debug.Log("Current state of enemyh in start func " + StateMachine.CurrentState);
         expAward = (int)UnityEngine.Random.Range(minExpAward, maxExpAward);
+        while (!DojoManager.Instance.IsInitialized)
+            await Task.Yield();
         // StartCoroutine(enumerator());
     }
 
+    private async Task CallEnemyTakeDamage(float damagee)
+    {
+        try
+        {
+            // This runs asynchronously without blocking gameplay
+            var result = await DojoActions.DamageEnemy(
+                enemy_id: new FieldElement(UInt32.Parse(gameObject.GetInstanceID().ToString())),
+                damage: (ushort)damagee
+            );
+
+            Debug.Log($"✅ Updated Player State. Tx: {result.Inner}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ Error updating player state: {ex.Message}");
+        }
+    }
     public void Update()
     {
         StateMachine?.LogicUpdate();
@@ -275,6 +296,7 @@ public class Enemy : MonoBehaviour
             ApplyKnockback(knockbackDirection, applyStun, knockbackForce);
         if (flash)
             StartCoroutine(FlashOnHit());
+        _= CallEnemyTakeDamage(damage);
 
         if (currentHealth == 0 && !hasDied)
             Die();
@@ -350,12 +372,29 @@ public class Enemy : MonoBehaviour
         onDeath();
         Destroy(gameObject); // For now, just destroy the enemy
     }
+        private async Task CallEnemyKilled()
+    {
+        try
+        {
+            // This runs asynchronously without blocking gameplay
+            var result = await DojoActions.EnemyKilled(
+                enemy_id: new FieldElement(UInt32.Parse(gameObject.GetInstanceID().ToString())) 
+            );
+
+            Debug.Log($"✅ Enemy spawned. Tx: {result.Inner}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ Error spawning enemy: {ex.Message}");
+        }
+    }
     public virtual void PerformAttack()
     {
         Debug.Log("Base Enemy Attack");
     }
     public virtual void onDeath()
     {
+            _= CallEnemyKilled();
         // Override this method to implement custom death behavior
         Debug.Log(Name + " has been defeated!");
     }

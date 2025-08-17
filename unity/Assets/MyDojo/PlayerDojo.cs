@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 public class PlayerDojo : MonoBehaviour
 {
     private float timer = 0f;
-
     public PlayerStats playerstats; // Reference to the PlayerStats script
     public Player player;           // Reference to the Player script
     public PlayerFSMState currentState;
