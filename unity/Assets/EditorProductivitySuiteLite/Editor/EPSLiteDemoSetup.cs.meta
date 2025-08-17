@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 65b5758b8bac9448db8ef88b243ac08d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329895
+  packageName: Editor Productivity Suite Lite
+  packageVersion: 1.0.0
+  assetPath: Assets/EditorProductivitySuiteLite/Editor/EPSLiteDemoSetup.cs
+  uploadId: 791200

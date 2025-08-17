@@ -305,8 +305,8 @@ MonoBehaviour:
   rpcUrl: https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2
   accountAddress: 0x0444f4770e09f24573f9418a93baf9c753598d7230c93bf5c686f7923892bfee
   privateKey: 0x029f1fb5ab54943df6019034f7dde295d6cd16c5614c7bf544bbab001194acda
-  actionsContract: 0x03ccedd7627e8d5832d1c9bfcf1bf1fc1532722271290b28000be65b19b2644f
-  functionToTest: 1
+  actionsContract: 0x03718c8a4b39b2d6a204454080cc8491c8ee0cbbc7faffde89d128d44411dc23
+  functionToTest: 2
 --- !u!4 &1133135177
 Transform:
   m_ObjectHideFlags: 0

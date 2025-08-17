@@ -26,7 +26,7 @@ public class attackHandler : MonoBehaviour
     {
         if (!attackHitbox.enabled && !upHitbox.enabled && !downHitbox.enabled) return;
 
-        if (enemyLayer == (enemyLayer | (1 << other.gameObject.layer)) &&
+        if ((other.gameObject.tag == "Enemy" || other.gameObject.tag == "Player") &&
             !hitEnemies.Contains(other.gameObject))
         {
             hitEnemies.Add(other.gameObject);
