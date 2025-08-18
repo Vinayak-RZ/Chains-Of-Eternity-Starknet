@@ -9,7 +9,7 @@ use dojo_starter::models::{
 pub trait IActions<T> {
     fn spawn_player(ref self: T);
     // spawn_enemy returns enemy_id (felt252) so callers receive the id
-    fn spawn_enemy(ref self: T , pos_x: i32, pos_y: i32, enemy_type: i8) -> felt252;
+    fn spawn_enemy(ref self: T , pos_x: i32, pos_y: i32, enemy_type: i8);
     fn enemy_damaged(ref self: T, enemy_id: felt252, damage: u16);
     fn enemy_killed(ref self: T, enemy_id: felt252);
 
@@ -198,7 +198,7 @@ pub mod actions {
         }
 
         // spawn_enemy now returns the generated enemy_id
-        fn spawn_enemy(ref self: ContractState, pos_x: i32, pos_y: i32, enemy_type: i8) -> felt252 {
+        fn spawn_enemy(ref self: ContractState, pos_x: i32, pos_y: i32, enemy_type: i8) {
             let mut world = self.world_default();
             let timestamp = get_block_timestamp();
 
@@ -233,8 +233,6 @@ pub mod actions {
                 enemy_type: enemy_kind,
                 position: Vec2i { x: pos_x, y: pos_y },
             });
-
-            enemy_id
         }
 
         fn enemy_damaged(ref self: ContractState, enemy_id: felt252, damage: u16) {
@@ -493,7 +491,7 @@ pub mod actions {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
-            self.world(@"dojo_starter")
+            self.world(@"arcane_starter")
         }
 
         fn generate_spell_instance_id(
