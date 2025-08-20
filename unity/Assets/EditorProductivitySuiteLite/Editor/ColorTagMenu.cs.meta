@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 9fee47f9af1dd412d805fa8d7f936fae
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329895
+  packageName: Editor Productivity Suite Lite
+  packageVersion: 1.0.0
+  assetPath: Assets/EditorProductivitySuiteLite/Editor/ColorTagMenu.cs
+  uploadId: 791200

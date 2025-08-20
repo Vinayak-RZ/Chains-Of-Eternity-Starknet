@@ -1,3 +1,4 @@
+using Dojo.Starknet;
 using UnityEngine;
 
 public enum ElementType { Fire, Water, Lightning, Wind }
@@ -9,6 +10,8 @@ public class SpellObject : ScriptableObject
     [Header("Core Info")]
     public string spellName;
     public ElementType element;
+
+    public FieldElement spell_id = new FieldElement(1);
     public GameObject visualPrefab;
     public float manaCost;
     public float cooldown;
