@@ -35,7 +35,7 @@ public class IdleState : BaseEnemyState
 
         if (idleTimer >= idleDuration)
         {
-            Debug.Log("Idle duration reached, transitioning to free roaming state");
+            //Debug.Log("Idle duration reached, transitioning to free roaming state");
             stateMachine.ChangeState(owner.FreeRoamingState);
 
         }
