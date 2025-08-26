@@ -1,9 +1,9 @@
 {
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
-    "address": "0x3a7e28319f3617da4135893c711c79a1306adcd87cca4fbd0ceda50ae397683",
-    "seed": "dojo_starter",
-    "name": "Dojo starter",
+    "address": "0x43382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32",
+    "seed": "raj210809",
+    "name": "Arcane",
     "entrypoints": [
       "uuid",
       "set_metadata",
@@ -1479,7 +1479,7 @@
   },
   "contracts": [
     {
-      "address": "0x630c0caeef8cc177dd8e2099086c8ca5eaa8e9bab50fb027b4c90595b401608",
+      "address": "0x3ccedd7627e8d5832d1c9bfcf1bf1fc1532722271290b28000be65b19b2644f",
       "class_hash": "0x48f9d10bb92eb2fbd1e8b7761ddd8850b1240401e528ae65874708dde964c41",
       "abi": [
         {
