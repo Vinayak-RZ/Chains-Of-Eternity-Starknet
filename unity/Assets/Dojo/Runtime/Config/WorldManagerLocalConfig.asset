@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faed63f2427f3ed83a42d16bb3e73e6d, type: 3}
   m_Name: WorldManagerLocalConfig
   m_EditorClassIdentifier: 
-  toriiUrl: http://localhost:8080
+  toriiUrl: 
   worldAddress:
-    hex: 0x05cb84ccfa869ea8cf9acb0c77b2d1a67a7e9e8fd4a877a1c111e3c2b1eb0f03
+    hex: 0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32
   query:
     pagination:
       cursor: 
