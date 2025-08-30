@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class InventoryOpenState : State<GameManager>
+public class InventoryOpenState : State<GameManagery>
 {
-    public InventoryOpenState(GameManager owner, StateMachine<GameManager> stateMachine)
+    public InventoryOpenState(GameManagery owner, StateMachine<GameManagery> stateMachine)
         : base(owner, stateMachine) { }
 
     public override void Enter()
