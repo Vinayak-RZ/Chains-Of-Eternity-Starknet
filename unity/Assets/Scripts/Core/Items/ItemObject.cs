@@ -41,6 +41,8 @@ public class ItemObject : ScriptableObject
     public ItemType type;
     [TextArea(3, 10)]
     public string description;
+
+    public ulong NFTID;
     public Item data = new Item();
     public float itemCost;
     public int maxItemStock;

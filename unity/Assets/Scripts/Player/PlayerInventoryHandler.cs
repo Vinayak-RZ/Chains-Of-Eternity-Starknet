@@ -5,6 +5,7 @@ public class PlayerInventoryHandler : MonoBehaviour
     [Header("Inventory")]
     public InventoryObject inventory;
     public InventoryObject equipment;
+    public InventoryObject potions;
     public HeroData heroData;
 
     private void Awake()

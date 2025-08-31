@@ -17,11 +17,11 @@ MonoBehaviour:
   type: 0
   Container:
     Slots:
-    - AllowedItems: 02000000
+    - AllowedItems: 
       item:
         Name: 
-        Id: -1
-        type: 2
+        Id: 0
+        type: 0
         rarity: 0
         description: 
         weaponData:
@@ -54,11 +54,11 @@ MonoBehaviour:
           name: 
           notes: 
       amount: 0
-    - AllowedItems: 02000000
+    - AllowedItems: 
       item:
         Name: 
-        Id: -1
-        type: 2
+        Id: 0
+        type: 0
         rarity: 0
         description: 
         weaponData:
@@ -91,11 +91,11 @@ MonoBehaviour:
           name: 
           notes: 
       amount: 0
-    - AllowedItems: 02000000
+    - AllowedItems: 
       item:
         Name: 
-        Id: -1
-        type: 2
+        Id: 0
+        type: 0
         rarity: 0
         description: 
         weaponData:

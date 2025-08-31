@@ -15,27 +15,29 @@ MonoBehaviour:
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 2048
-  damage: 12
+  damage: 10
   knockbackForce: 4
   destroyOnHit: 1
   canPierce: 0
   maxPierceCount: 1
   movementPath: 4
-  projectileSpeed: 10.1
+  projectileSpeed: 6
   projectileLifeTime: 3.5
   projectileSize: 1
   numberOfProjectiles: 3
-  delayBetweenProjectiles: 0.083
+  delayBetweenProjectiles: 0
   spawnOffsets:
   - {x: 0, y: 0}
-  staggeredLaunchAngle: 5
+  - {x: 0, y: 1}
+  - {x: 0, y: -1}
+  staggeredLaunchAngle: 0
   directions:
   - {x: 0.70710677, y: 0.70710677}
   zigzagAmplitude: 16.7
   zigzagFrequency: 8
-  homingDelay: 0.5
-  homingRadius: 6
-  homingUpdateRate: 0.1
+  homingDelay: 0.15
+  homingRadius: 7.4
+  homingUpdateRate: 0.3
   circularInitialRadius: 2.23
   circularSpeed: 3.25
   circularRadialSpeed: -5

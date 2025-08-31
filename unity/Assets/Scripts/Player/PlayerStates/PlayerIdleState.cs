@@ -17,7 +17,7 @@ public class PlayerIdleState : PlayerState
         player.Animator.SetBool("dashing", false);
         player.Animator.SetBool("walkingDown", false);
         //player.Animator.SetBool("attacking", false);                //LMAO GAME BREAKING LINE 
-        player.Animator.SetBool("stunned", false);
+        //player.Animator.SetBool("stunned", false);
         player.SetVelocity(Vector2.zero);
         //Debug.Log("Player has entered idle state.");
     }
@@ -32,14 +32,14 @@ public class PlayerIdleState : PlayerState
             //Debug.Log("Player has started moving.");
             stateMachine.ChangeState(player.moveState);
         }
-        if (InputManager.Instance.DashPressed && player.canDash && player.currentEnergy >= player.dashEnergyCost)
+        if (InputManager.Instance.DashPressed && player.canDash && player.CurrentEnergy >= player.DashEnergyCost)
         {
             stateMachine.ChangeState(player.dashState);
             return;
         }
         spellcast = InputManager.Instance.Spell1Pressed || InputManager.Instance.Spell2Pressed || 
                     InputManager.Instance.Spell3Pressed || InputManager.Instance.Spell4Pressed;
-        if (spellcast && player.currentMana > 20)
+        if (spellcast && player.CurrentMana > 20)
         {
             stateMachine.ChangeState(player.spellState);
             return;

@@ -21,6 +21,8 @@ public class StunState : BaseEnemyState
     public override void Exit()
     {
         base.Exit();
+        owner.animator.SetBool("isStunned", false); // Reset stunned animation
+        owner.spriteRenderer.color = Color.white; // Reset color if it was changed
     }
     public override void LogicUpdate()
     {
