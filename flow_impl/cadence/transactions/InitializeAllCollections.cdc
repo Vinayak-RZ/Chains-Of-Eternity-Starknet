@@ -4,7 +4,7 @@ import HeroNFT from 0x0095f13a82f1a835
 import AuctionCallbackHandler from 0x0095f13a82f1a835
 import FlowTransactionScheduler from 0x8c5303eaa26202d6
 
-access(all) transaction() {
+transaction() {
 
     prepare(
         signer: auth(
@@ -55,5 +55,19 @@ access(all) transaction() {
         let _ = signer.capabilities.storage.issue<
             auth(FlowTransactionScheduler.Execute) &{FlowTransactionScheduler.TransactionHandler}
         >(/storage/AuctionCallbackHandler)
+
+        if signer.storage.borrow<&ItemManager.Collection>(from: ItemManager.CollectionStoragePath) != nil {
+            return
+        }else {
+            let collection <- ItemManager.createEmptyCollection(nftType: Type<@ItemManager.NFT>())
+
+            // save it to the account
+            signer.storage.save(<-collection, to: ItemManager.CollectionStoragePath)
+
+            let collectionCap = signer.capabilities.storage.issue<&ItemManager.Collection>(ItemManager.CollectionStoragePath)
+            signer.capabilities.publish(collectionCap, at: ItemManager.CollectionPublicPath)
+        }
+
+        // Create a new empty collection
     }
 }
