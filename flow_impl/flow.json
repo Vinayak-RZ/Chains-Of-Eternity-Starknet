@@ -13,7 +13,15 @@
 				"emulator": "f8d6e0586b0a20c7",
 				"testnet": "c6e616f1e50fcfab"
 			}
+		},
+		"MarketPlace2": {
+			"source": "cadence/contracts/MarketPlace2.cdc",
+			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
+				"testnet": "c6e616f1e50fcfab"
+			}
 		}
+		
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
