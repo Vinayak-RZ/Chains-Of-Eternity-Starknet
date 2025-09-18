@@ -21,7 +21,7 @@ MonoBehaviour:
       item:
         Name: 
         Id: -1
-        type: 0
+        type: 2
         rarity: 0
         description: 
         weaponData:
@@ -58,7 +58,7 @@ MonoBehaviour:
       item:
         Name: 
         Id: -1
-        type: 0
+        type: 2
         rarity: 0
         description: 
         weaponData:
@@ -95,7 +95,7 @@ MonoBehaviour:
       item:
         Name: 
         Id: -1
-        type: 0
+        type: 2
         rarity: 0
         description: 
         weaponData:
