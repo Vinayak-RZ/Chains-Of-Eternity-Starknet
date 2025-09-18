@@ -175,30 +175,32 @@ access(all) contract ItemManager: NonFungibleToken {
                 )
         }
         return nil
+    }
+
+    // access(all) resource NFTMinter 
+    // {
+    //     access(all) fun createNFT(): @NFT {
+    //         return <-create NFT(            
+    //             id: receiver,
+    //             name: "Sword of Testing",
+    //             description: "A test sword",
+    //             itemType: ItemManager.ItemType.Weapon,
+    //             rarity: ItemManager.Rarity.Common,
+    //             stackable: false,
+    //             weapon: ItemManager.WeaponData(
+    //                 damage: 10,
+    //                 attackSpeed: 1,
+    //                 criticalRate: 5,
+    //                 criticalDamage: 50
+    //             ),
+    //             armour: nil,
+    //             consumable: nil,
+    //             accessory: nil
+    //         )
+    //     }
+    //     init() {}
+    // }
     
-     access(all) resource NFTMinter 
-     {
-         access(all) fun createNFT(): @NFT {
-             return <-create NFT(            
-                 id: receiver,
-                 name: "Sword of Testing",
-                 description: "A test sword",
-                 itemType: ItemManager.ItemType.Weapon,
-                 rarity: ItemManager.Rarity.Common,
-                 stackable: false,
-                 weapon: ItemManager.WeaponData(
-                     damage: 10,
-                     attackSpeed: 1,
-                     criticalRate: 5,
-                     criticalDamage: 50
-                 ),
-                 armour: nil,
-                 consumable: nil,
-                 accessory: nil
-             )
-         }
-         init() {}
-     }
     // ===== Resource: NFT Item =====
     access(all) resource NFT: NonFungibleToken.NFT, ViewResolver.Resolver {
         access(all) let id: UInt64
@@ -238,20 +240,20 @@ access(all) contract ItemManager: NonFungibleToken {
             self.accessory = accessory
             self.imgURL = "ipfs://bafybeidhmg4d7gsiby2jrsilfkntoiq2aknreeeghmgfgltjqiacecpdey"
         }
-    
+   
         // Metadata Views support
-         access(all) fun resolveView(_ view: Type): AnyStruct? {
-             switch view {
-             case Type<MetadataViews.Display>():
-                 return MetadataViews.Display(
-                     name: self.name,
-                     description: self.description,
-                     thumbnail: MetadataViews.HTTPFile(url: "ipfs://bafybeidhmg4d7gsiby2jrsilfkntoiq2aknreeeghmgfgltjqiacecpdey")
-                 )
-             default:
-                 return nil
-             }
-         }
+        // access(all) fun resolveView(_ view: Type): AnyStruct? {
+        //     switch view {
+        //     case Type<MetadataViews.Display>():
+        //         return MetadataViews.Display(
+        //             name: self.name,
+        //             description: self.description,
+        //             thumbnail: MetadataViews.HTTPFile(url: "ipfs://bafybeidhmg4d7gsiby2jrsilfkntoiq2aknreeeghmgfgltjqiacecpdey")
+        //         )
+        //     default:
+        //         return nil
+        //     }
+        // }
         access(all) fun createEmptyCollection(): @{NonFungibleToken.Collection} {
             return <-ItemManager.createEmptyCollection(nftType: Type<@ItemManager.NFT>())
         }
@@ -377,11 +379,12 @@ access(all) contract ItemManager: NonFungibleToken {
             return <-token
         }
 
-         access(all) fun borrowNFT(id: UInt64): &{NonFungibleToken.NFT} {
-             let nftRef = &self.ownedNFTs[id] as &{NonFungibleToken.NFT}?
-             ?? panic("NFT does not exist in this collection")
-             return nftRef
-         }
+        // access(all) fun borrowNFT(id: UInt64): &{NonFungibleToken.NFT} {
+        //     let nftRef = &self.ownedNFTs[id] as &{NonFungibleToken.NFT}?
+        //     ?? panic("NFT does not exist in this collection")
+
+        //     return nftRef
+        // }
 
         access(all) view fun borrowNFT(_ id: UInt64): &{NonFungibleToken.NFT}? {
             return &self.ownedNFTs[id]
