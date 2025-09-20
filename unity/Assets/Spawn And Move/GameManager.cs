@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     public BurnerManager burnerManager;
     private Dictionary<FieldElement, string> spawnedAccounts = new();
-    public Actions actions;
+    public Actions1 actions;
 
     public JsonRpcClient provider;
     public Account masterAccount;

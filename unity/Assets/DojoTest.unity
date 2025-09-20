@@ -365,6 +365,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2083031344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2083031346}
+  - component: {fileID: 2083031345}
+  m_Layer: 0
+  m_Name: DojoStarter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2083031345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083031344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0de60eade090b6540bc3d0ad0f513c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DojoGameController
+  rpcUrl: https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2
+  accountAddress: 0x0444f4770e09f24573f9418a93baf9c753598d7230c93bf5c686f7923892bfee
+  privateKey: 0x029f1fb5ab54943df6019034f7dde295d6cd16c5614c7bf544bbab001194acda
+  actionsContract: 0x03ccedd7627e8d5832d1c9bfcf1bf1fc1532722271290b28000be65b19b2644f
+--- !u!4 &2083031346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083031344}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 417.33307, y: 207.46274, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -372,3 +420,4 @@ SceneRoots:
   - {fileID: 1938827286}
   - {fileID: 1006708238}
   - {fileID: 453320273}
+  - {fileID: 2083031346}
