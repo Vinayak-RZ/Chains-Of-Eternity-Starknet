@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerMoveState : PlayerState
 {
     private Vector2 moveInput;
+    private bool spellcast;
     public PlayerMoveState(Player player, StateMachine<Player> stateMachine)
         : base(player, stateMachine) { }
 
@@ -13,7 +14,7 @@ public class PlayerMoveState : PlayerState
     }
 
     public override void LogicUpdate()
-    {   
+    {
         base.LogicUpdate();
         moveInput = InputManager.Instance.MoveDirection;
 
@@ -50,6 +51,14 @@ public class PlayerMoveState : PlayerState
         }
 
         player.FlipIfNeeded(moveInput.x);
+        
+        spellcast = InputManager.Instance.Spell1Pressed || InputManager.Instance.Spell2Pressed || 
+                    InputManager.Instance.Spell3Pressed || InputManager.Instance.Spell4Pressed;
+        if (spellcast && player.currentMana > 20)
+        {
+            stateMachine.ChangeState(player.spellState);
+            return;
+        }
     }
 
     public override void PhysicsUpdate()
@@ -59,7 +68,7 @@ public class PlayerMoveState : PlayerState
 
     public override void Exit()
     {
-        Debug.Log("CHal raha hai kya");
+        //Debug.Log("CHal raha hai kya");
         player.Animator.SetBool("walkingUp", false);
         player.Animator.SetBool("walkingDown", false);
         player.Animator.SetBool("walking", false);
