@@ -14,10 +14,10 @@ public class PlayerIdleState : PlayerState
         player.Animator.SetBool("walkingUp", false);
         player.Animator.SetBool("dashing", false);
         player.Animator.SetBool("walkingDown", false);
-        player.Animator.SetBool("attacking", false);
+        //player.Animator.SetBool("attacking", false);                //LMAO GAME BREAKING LINE 
         player.Animator.SetBool("stunned", false);
         player.SetVelocity(Vector2.zero);
-        Debug.Log("Player has entered idle state.");
+        //Debug.Log("Player has entered idle state.");
     }
 
     public override void HandleInput()
