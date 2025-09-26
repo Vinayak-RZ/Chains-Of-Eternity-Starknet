@@ -1,6 +1,4 @@
-Here’s a polished `README.md` draft for **Arcane: Chains of Eternity**:
 
-````markdown
 # Arcane: Chains of Eternity
 
 <div align="center">
@@ -107,7 +105,7 @@ Our project was made possible with the support of several key blockchain ecosyst
    ```bash
    git clone https://github.com/<your-org>/arcane-chains-of-eternity.git
    cd arcane-chains-of-eternity
-````
+
 
 2. **Unity Project**
 
@@ -172,7 +170,4 @@ Our goal is to create a world where spells, items, and player identities hold **
 
 This project is licensed under the MIT License.
 
-```
-
-Do you want me to also include **screenshots/GIFs** sections (like gameplay previews and architecture diagrams), or keep it lean and hackathon-focused?
 ```
