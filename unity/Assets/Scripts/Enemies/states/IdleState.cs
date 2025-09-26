@@ -17,12 +17,22 @@ public class IdleState : BaseEnemyState
         StopMoving();
         idleTimer = 0f;
         //Debug.Log("Entering idle state");
-        owner.animator.SetBool("isWalking", false);
+        owner.animator.SetBool("followPlayer", false);
+        owner.animator.SetBool("freeRoam", false);
+        owner.animator.SetBool("isAttacking", false);   
     }
 
     public override void LogicUpdate()
     {
+        StopMoving();
         idleTimer += Time.deltaTime;
+
+        if(owner.CanSeePlayer())
+        {
+            stateMachine.ChangeState(owner.FollowState);
+        }
+
+
         if (idleTimer >= idleDuration)
         {
             stateMachine.ChangeState(owner.FreeRoamingState);

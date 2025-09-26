@@ -4,6 +4,12 @@ public class FollowState : BaseEnemyState
     public FollowState(Enemy owner, StateMachine<Enemy> stateMachine)
         : base(owner, stateMachine) { }
 
+    public override void Enter()
+    {
+        owner.animator.SetBool("followPlayer", true);
+        owner.animator.SetBool("freeRoam", false);
+        owner.animator.SetBool("isAttacking", false);
+    }
     public override void LogicUpdate()
     {
         if (!owner.CanSeePlayer())
@@ -19,6 +25,6 @@ public class FollowState : BaseEnemyState
             return;
         }
 
-        MoveTowards(Player.position);
+        MoveTowards(Player.position, owner.MoveSpeed + 2);
     }
 }
