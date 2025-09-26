@@ -25,6 +25,6 @@ public class FollowState : BaseEnemyState
             return;
         }
 
-        MoveTowards(Player.position, owner.MoveSpeed + 2);
+        MoveTowards(Player.position);
     }
 }
