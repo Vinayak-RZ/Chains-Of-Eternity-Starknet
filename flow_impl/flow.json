@@ -1,9 +1,10 @@
 {
 	"contracts": {
-		"Counter": {
-			"source": "cadence/contracts/Counter.cdc",
+		"HeroManager": {
+			"source": "cadence/contracts/HeroManager.cdc",
 			"aliases": {
-				"testing": "0000000000000007"
+				"emulator": "f8d6e0586b0a20c7",
+				"testnet": "c6e616f1e50fcfab"
 			}
 		}
 	},
