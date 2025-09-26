@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
     public PlayerIdleState idleState { get; private set; }
     public PlayerMoveState moveState { get; private set; }
     public PlayerDashState dashState { get; private set; }
+    public PlayerStunState stunState { get; private set; }
     // public PlayerAttackState attackState { get; private set; } // for future
 
     [Header("Components")]
@@ -41,6 +43,7 @@ public class Player : MonoBehaviour
     public Vector2 CurrentVelocity => RB.linearVelocity;
     public bool IsFacingRight = true;
     private float RegenTimer = 0f;
+    public bool isInvincible = false; // For future use, e.g., after taking damage
 
     private void Awake()
     {
@@ -56,6 +59,7 @@ public class Player : MonoBehaviour
         idleState = new PlayerIdleState(this, stateMachine);
         moveState = new PlayerMoveState(this, stateMachine);
         dashState = new PlayerDashState(this, stateMachine);
+        stunState = new PlayerStunState(this, stateMachine);
         // attackState = new PlayerAttackState(this, stateMachine); // for future
     }
 
@@ -72,7 +76,7 @@ public class Player : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {   
+    {
         RegenTimer += Time.fixedDeltaTime;
         if (RegenTimer >= RegenerateResourcesRate)
         {
@@ -80,7 +84,7 @@ public class Player : MonoBehaviour
             RegenTimer = 0f;
         }
         stateMachine.PhysicsUpdate();
-        
+
     }
 
     #region Utility Methods — Called by States
@@ -116,16 +120,22 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage, string damageType = "Physical")
+    public void Invincibilty(bool isInvincibleee)
     {
+        isInvincible = isInvincibleee;
+    }
+    public void TakeDamage(int damage, Vector3 sourcePos, bool applyKnockback = true, bool applyStun = true, string damageType = "Physical")
+    {
+        if (isInvincible) return; // Ignore damage if invincible
         //TODO : Handle different damage types (e.g., Physical, Magical)
         int effectiveDamage = Mathf.Max(0, damage - heroData.defensiveStats.defense);
         currentHealth = Mathf.Max(0, currentHealth - effectiveDamage);
-
+        if (applyKnockback)
+            ApplyKnockback((transform.position - sourcePos).normalized, 15f,applyStun);
         if (currentHealth == 0)
             Die();
     }
-
+    
     public void UseMana(int amount)
     {
         currentMana = Mathf.Max(0, currentMana - amount);
@@ -135,12 +145,50 @@ public class Player : MonoBehaviour
     {
         currentEnergy = Mathf.Max(0, currentEnergy - amount);
     }
-
+    public void Enable_DisableInput(bool check)
+    {
+        // This method can be used to disable player input during certain states (e.g., stunned, dashing)
+        if (check)
+        {
+            InputManager.Instance.EnableInput();
+        }
+        else
+        {
+            InputManager.Instance.DisableInput();
+        }
+    }
     public void RegenerateResources()
     {
         currentHealth = Mathf.Min(heroData.defensiveStats.maxHealth, currentHealth + heroData.defensiveStats.healthRegeneration);
         currentMana = Mathf.Min(heroData.specialStats.maxMana, currentMana + heroData.specialStats.manaRegeneration);
         currentEnergy = Mathf.Min(heroData.specialStats.maxEnergy, currentEnergy + heroData.specialStats.energyRegeneration);
+    }
+    public void ApplyKnockback(Vector2 direction, float force, bool applyStun, float duration = 0.2f)
+    {   
+        stateMachine.ChangeState(idleState);
+        StartCoroutine(KnockbackRoutine(direction, force, duration, applyStun));
+    }
+    private IEnumerator KnockbackRoutine(Vector2 direction, float force, float duration, bool applyStun)
+    {
+        // Freeze current velocity and apply impulse
+        RB.linearVelocity = Vector2.zero;
+        Enable_DisableInput(false); // Disable input during knockback
+        RB.AddForce(direction.normalized * force, ForceMode2D.Impulse);
+        // Wait for knockback duration
+        yield return new WaitForSeconds(duration);
+        Enable_DisableInput(true); // Re-enable input after knockback
+        if (applyStun)
+        {
+            stateMachine.ChangeState(stunState);
+        }
+        else
+        {
+            // Resume movement or idle based on input
+            if (InputManager.Instance.MoveDirection != Vector2.zero)
+                stateMachine.ChangeState(moveState);
+            else
+                stateMachine.ChangeState(idleState);
+        }
     }
 
     private void Die()
