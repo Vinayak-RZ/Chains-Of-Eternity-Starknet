@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
@@ -10,7 +11,7 @@ public class Player : MonoBehaviour
 
     // Runtime values
     [SerializeField] public int currentHealth;
-    [SerializeField] private int currentMana;
+    [SerializeField] public int currentMana;
     [SerializeField] public int currentEnergy;
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
@@ -28,18 +29,26 @@ public class Player : MonoBehaviour
 
     [Header("State Machine")]
     public StateMachine<Player> stateMachine { get; private set; }
+    public StateMachine<Player> AttackStateMachine { get; private set; } 
 
     // Player States (Add more later)
     public PlayerIdleState idleState { get; private set; }
     public PlayerMoveState moveState { get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerStunState stunState { get; private set; }
+    public PlayerAttackState attackState { get; private set; } 
+    public PlayerNoAttackState noAttackState { get; private set; } 
+
     // public PlayerAttackState attackState { get; private set; } // for future
 
     [Header("Components")]
     public Rigidbody2D RB { get; private set; }
     public Animator Animator { get; private set; }
 
+    private attackHandler attackHandler; // Reference to the attack handler script
+
+    [SerializeField] private BoxCollider2D attackHitbox; // Reference to the attack hitbox GameObject
+    [SerializeField] private LayerMask enemyLayer;
     public Vector2 CurrentVelocity => RB.linearVelocity;
     public bool IsFacingRight = true;
     private float RegenTimer = 0f;
@@ -49,30 +58,34 @@ public class Player : MonoBehaviour
     {
         RB = transform.GetComponent<Rigidbody2D>();
         Animator = transform.GetComponent<Animator>();
-
+        Enable_DisableInput(true); // Enable input by default
         currentHealth = heroData.defensiveStats.maxHealth;
         currentMana = heroData.specialStats.maxMana;
         currentEnergy = heroData.specialStats.maxEnergy;
 
         stateMachine = new StateMachine<Player>();
+        AttackStateMachine = new StateMachine<Player>();
+
+        attackHandler = GetComponentInChildren<attackHandler>();
 
         idleState = new PlayerIdleState(this, stateMachine);
         moveState = new PlayerMoveState(this, stateMachine);
         dashState = new PlayerDashState(this, stateMachine);
         stunState = new PlayerStunState(this, stateMachine);
-        // attackState = new PlayerAttackState(this, stateMachine); // for future
+        attackState = new PlayerAttackState(this, AttackStateMachine); 
+        noAttackState = new PlayerNoAttackState(this, AttackStateMachine);
     }
-
     private void Start()
     {
-        RB.freezeRotation = true;
+        AttackStateMachine.Initialize(noAttackState); // Start with no attack state
         stateMachine.Initialize(idleState);
-    }
-
+    }   
     private void Update()
     {
         stateMachine.HandleInput();
         stateMachine.LogicUpdate();
+        AttackStateMachine.HandleInput();
+        AttackStateMachine.LogicUpdate();
     }
 
     private void FixedUpdate()
@@ -84,7 +97,7 @@ public class Player : MonoBehaviour
             RegenTimer = 0f;
         }
         stateMachine.PhysicsUpdate();
-
+        AttackStateMachine.PhysicsUpdate();
     }
 
     #region Utility Methods — Called by States
@@ -131,11 +144,11 @@ public class Player : MonoBehaviour
         int effectiveDamage = Mathf.Max(0, damage - heroData.defensiveStats.defense);
         currentHealth = Mathf.Max(0, currentHealth - effectiveDamage);
         if (applyKnockback)
-            ApplyKnockback((transform.position - sourcePos).normalized, 15f,applyStun);
+            ApplyKnockback((transform.position - sourcePos).normalized, 15f, applyStun);
         if (currentHealth == 0)
             Die();
     }
-    
+
     public void UseMana(int amount)
     {
         currentMana = Mathf.Max(0, currentMana - amount);
@@ -164,7 +177,7 @@ public class Player : MonoBehaviour
         currentEnergy = Mathf.Min(heroData.specialStats.maxEnergy, currentEnergy + heroData.specialStats.energyRegeneration);
     }
     public void ApplyKnockback(Vector2 direction, float force, bool applyStun, float duration = 0.2f)
-    {   
+    {
         stateMachine.ChangeState(idleState);
         StartCoroutine(KnockbackRoutine(direction, force, duration, applyStun));
     }
@@ -201,6 +214,33 @@ public class Player : MonoBehaviour
     {
         throw new NotImplementedException();
     }
+
+    public void EnableHitboxDef(bool value)
+    {
+        attackHitbox.enabled = value;
+        if (value)
+            ClearHitEnemies(); // reset before each swing
+    }
+    public void EnableHitbox()
+    {
+        EnableHitboxDef(true);
+    }
+
+    public void DisableHitbox()
+    {
+        EnableHitboxDef(false);
+    }
+
+    public void ClearHitEnemies()
+    {
+        attackHandler.ClearHitEnemies();
+    }
+
+    public void AttackDone()
+    {
+        (AttackStateMachine.CurrentState as PlayerAttackState)?.OnAttackAnimationComplete();
+    }
+
 
     #endregion
 }

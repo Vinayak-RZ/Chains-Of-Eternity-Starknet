@@ -11,6 +11,10 @@ public class PlayerStunState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.Animator.SetBool("walking", false); 
+        player.Animator.SetBool("walkingUp", false);
+        player.Animator.SetBool("walkingDown", false);
+        player.Animator.SetBool("dashing", false);
         player.Enable_DisableInput(false); // Disable input
         startTime = Time.time;
         player.SetVelocity(Vector2.zero); // Optional freeze
@@ -19,7 +23,7 @@ public class PlayerStunState : PlayerState
     {
         base.Exit();
         player.Enable_DisableInput(true); // Re-enable input
-        player.PlayAnimation("Idle"); // Reset animation to idle after stun
+         // Reset animation to idle after stun
     }
     public override void LogicUpdate()
     {
