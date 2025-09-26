@@ -1,11 +1,17 @@
+using System;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpaaaaaaaaaaaeed = 2f;
+    public String Name = "Enemy";
+
+    public NavMeshAgent agent;
+
     public float AttackRange = 1.5f;
     public float AttackCooldown = 1f;
 
@@ -35,6 +41,8 @@ public class Enemy : MonoBehaviour
     public FollowState FollowState { get; private set; }
     public AttackState AttackState { get; private set; }
 
+    public bool IsFacingRight = true;
+
     private void Awake()
     {
         if (playerTransform == null)
@@ -43,8 +51,14 @@ public class Enemy : MonoBehaviour
         RB = transform.GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
+    void Start()
     {
+        RB.freezeRotation = true;
+
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false; // Disable automatic rotation to control it manually
+        agent.updateUpAxis = false; // Disable automatic up-axis adjustment if not needed
+
         StateMachine = new StateMachine<Enemy>();
 
         IdleState = new IdleState(this, StateMachine);
@@ -53,7 +67,7 @@ public class Enemy : MonoBehaviour
         AttackState = new AttackState(this, StateMachine);
 
         StateMachine.Initialize(IdleState);
-        RB.freezeRotation = true;
+
     }
 
     private void Update()
@@ -64,7 +78,9 @@ public class Enemy : MonoBehaviour
     private void FixedUpdate()
     {
         StateMachine?.PhysicsUpdate();
+        FlipIfNeeded();
     }
+
 
 
     public bool CanSeePlayer()
@@ -99,11 +115,11 @@ public class Enemy : MonoBehaviour
 
     public Vector2 GetRandomRoamPosition()
     {
-        Vector2 randomOffset = Random.insideUnitCircle * roamRadius;
+        Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * roamRadius;
         Vector2 targetPos = (Vector2)transform.position + randomOffset;
         for (int i = 0; i < 100; i++) // Retry a few times in case of invalid points
         {
-            randomOffset = Random.insideUnitCircle * roamRadius;
+            randomOffset = UnityEngine.Random.insideUnitCircle * roamRadius;
             targetPos = (Vector2)transform.position + randomOffset;
             //Debug.Log(randomOffset);
             //Debug.Log(targetPos);
@@ -112,7 +128,7 @@ public class Enemy : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(
                 origin: transform.position,
                 direction: (targetPos - (Vector2)transform.position).normalized,
-                distance: (targetPos - (Vector2)transform.position).magnitude, 
+                distance: (targetPos - (Vector2)transform.position).magnitude,
                 layerMask: obstacleLayer
             );
             if (hit == false)
@@ -124,5 +140,22 @@ public class Enemy : MonoBehaviour
         return targetPos;
     }
 
-
+    public void FlipIfNeeded()
+    {
+        if (agent.velocity.x != 0)
+        {
+            bool shouldFlip = (agent.velocity.x > 0 && !IsFacingRight) || (agent.velocity.x < 0 && IsFacingRight);
+            if (shouldFlip)
+            {
+                Debug.Log("Flipping" + Name);
+                IsFacingRight = !IsFacingRight;
+                RB.transform.Rotate(0f, 180f, 0f);
+            }
+        }
+    }
+    public virtual void PerformAttack()
+    {
+        Debug.Log("Base Enemy Attack");
+    }
 }
+    
