@@ -3,12 +3,14 @@ using UnityEngine;
 public class PlayerIdleState : PlayerState
 {
     private Vector2 moveInput;
+    private bool spellcast;
 
     public PlayerIdleState(Player player, StateMachine<Player> stateMachine)
         : base(player, stateMachine) { }
 
     public override void Enter()
-    {
+    {   
+
         //Debug.Log("Player has entered idle state.");
         player.Animator.SetBool("walking", false);
         player.Animator.SetBool("walkingUp", false);
@@ -35,6 +37,12 @@ public class PlayerIdleState : PlayerState
             stateMachine.ChangeState(player.dashState);
             return;
         }
-
+        spellcast = InputManager.Instance.Spell1Pressed || InputManager.Instance.Spell2Pressed || 
+                    InputManager.Instance.Spell3Pressed || InputManager.Instance.Spell4Pressed;
+        if (spellcast && player.currentMana > 20)
+        {
+            stateMachine.ChangeState(player.spellState);
+            return;
+        }
     }
 }
