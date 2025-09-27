@@ -10,7 +10,7 @@ public enum InterfaceType
 {
     Inventory,
     Equipment,
-    Chest
+    Default, // For items that don't fit other categories
 }
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
@@ -26,23 +26,42 @@ public class InventoryObject : ScriptableObject
     public bool AddItem(Item _item, int _amount)
     {
         if (EmptySlotCount <= 0)
+        {
+            Debug.Log("Inventory is full. Cannot add item.");
             return false;
+        }
+
+        // Make sure item exists in database
+        Debug.Log($"Attempting to add item with ID: {_item.Id} and amount: {_amount}");
+        if (_item.Id < 0  || database.ItemObjects[_item.Id] == null)
+        {
+            Debug.LogWarning("Item ID is invalid or not found in database.");
+            return false;
+        }
+
+        ItemObject itemObject = database.ItemObjects[_item.Id];
+
+        // Check if item is stackable and already exists
         InventorySlot slot = FindItemOnInventory(_item);
-        if(!database.ItemObjects[_item.Id].stackable || slot == null)
+        if (!itemObject.stackable || slot == null)
         {
             SetEmptySlot(_item, _amount);
             return true;
         }
+
         slot.AddAmount(_amount);
         return true;
     }
+
     public int EmptySlotCount
     {
         get
         {
             int counter = 0;
+            //Debug.Log("This is slots length " + GetSlots.Length);
             for (int i = 0; i < GetSlots.Length; i++)
             {
+                //Debug.Log(i);
                 if (GetSlots[i].item.Id <= -1)
                 {
                     counter++;
@@ -55,7 +74,7 @@ public class InventoryObject : ScriptableObject
     {
         for (int i = 0; i < GetSlots.Length; i++)
         {
-            if(GetSlots[i].item.Id == _item.Id)
+            if (GetSlots[i].item.Id == _item.Id)
             {
                 return GetSlots[i];
             }
@@ -78,14 +97,14 @@ public class InventoryObject : ScriptableObject
 
     public void SwapItems(InventorySlot item1, InventorySlot item2)
     {
-        if(item2.CanPlaceInSlot(item1.ItemObject) && item1.CanPlaceInSlot(item2.ItemObject))
+        if (item2.CanPlaceInSlot(item1.ItemObject) && item1.CanPlaceInSlot(item2.ItemObject))
         {
-            InventorySlot temp = new InventorySlot( item2.item, item2.amount);
+            InventorySlot temp = new InventorySlot(item2.item, item2.amount);
             item2.UpdateSlot(item1.item, item1.amount);
             item1.UpdateSlot(temp.item, temp.amount);
         }
     }
-    
+
 
     [ContextMenu("Save")]
     public void Save()
@@ -161,7 +180,7 @@ public class InventorySlot
     {
         get
         {
-            if(item.Id >= 0)
+            if (item.Id >= 0)
             {
                 return parent.inventory.database.ItemObjects[item.Id];
             }
@@ -192,7 +211,8 @@ public class InventorySlot
     }
     public void AddAmount(int value)
     {
-        UpdateSlot(item, amount += value);
+        amount += value;
+        UpdateSlot(item, amount);
     }
     public bool CanPlaceInSlot(ItemObject _itemObject)
     {

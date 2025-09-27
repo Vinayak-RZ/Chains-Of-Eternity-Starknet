@@ -21,10 +21,11 @@ public class FollowState : BaseEnemyState
         float distanceToPlayer = Vector2.Distance(owner.transform.position, Player.position);
         if (distanceToPlayer <= owner.AttackRange)
         {
+            Debug.Log("Switching to Attack State");
             stateMachine.ChangeState(owner.AttackState);
             return;
         }
 
-        MoveTowards(Player.position);
+        MoveTowards(Player.position, owner.MoveSpeed + 2);
     }
 }
