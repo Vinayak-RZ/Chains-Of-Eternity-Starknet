@@ -7,10 +7,10 @@ public static class SpellFactory
     {
         switch (spell.attackSubtype)
         {
-            case AttackSubtype.Projectile:
+            case AttackSubtypeUnity.Projectile:
                 CreateProjectileSpell(spell.attackData.projectileData, spell.visualPrefab, caster);
                 break;
-            case AttackSubtype.AoE:
+            case AttackSubtypeUnity.AoE:
                 CreateAoESpell(spell.attackData.aoeData, spell.visualPrefab, caster);
                 break;
         }

@@ -4,7 +4,7 @@ using UnityEditor;
 namespace DialogueEditor
 {
     [CustomEditor(typeof(ConversationManager))]
-    public class ConversationManagerEditor : Editor
+    public class ConversationManagerEditor : UnityEditor.Editor
     {
         private const string PREVIEW_TEXT = "Placeholder text. This image acts as a preview of the in-game GUI.";
         private const float BOX_HEIGHT = 75;

@@ -12,6 +12,12 @@ EditorBuildSettings:
     path: Assets/PurrLobby/LobbyScenes/NetworkedScene.unity
     guid: e6ba6bbd3072e63449ec09bda4a1b5e6
   - enabled: 1
+    path: Assets/LobbyStart Safe_ryuga.unity
+    guid: 33b7b5b19454a1f4da079c195481cdb3
+  - enabled: 1
+    path: Assets/DungeonMultiplayer Safe_ryuga.unity
+    guid: e4795cc29c3580649a75b8165b704107
+  - enabled: 1
     path: Assets/LobbyStart.unity
     guid: 0c7f47bb2b0e55d43a3af653291ae3bb
   - enabled: 1

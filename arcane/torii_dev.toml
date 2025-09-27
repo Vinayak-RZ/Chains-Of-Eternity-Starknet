@@ -1,0 +1,12 @@
+rpc = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2"
+
+[indexing]
+contracts = [
+  "WORLD:0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"
+]
+pending = false
+transactions = true
+namespaces = []
+models = []
+world_block = 0
+
