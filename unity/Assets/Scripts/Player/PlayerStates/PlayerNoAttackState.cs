@@ -10,6 +10,7 @@ public class PlayerNoAttackState : PlayerState
 
     public override void Enter()
     {
+        player.Enable_DisableInput(true);
         player.Animator.SetBool("attacking", false);
     }
 
@@ -18,6 +19,7 @@ public class PlayerNoAttackState : PlayerState
         //base.LogicUpdate();
         if (InputManager.Instance.AttackPressed)
         {
+            //Debug.Log("Attack buttn pressed");
             stateMachine.ChangeState(player.attackState);
             return;
         }
