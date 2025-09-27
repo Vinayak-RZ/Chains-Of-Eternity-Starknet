@@ -1,7 +1,14 @@
 import {express} from 'express';
 import { heroCollection } from "../controllers/CollectionHero-test.js";
 import { mintHero } from "../controllers/HeroNFT.js";
-
+import { updateHero } from "../controllers/UpdateHeroSol.js";
+import {mintNFT} from "../controllers/MintNFT.js";
+import {emptyCollection} from "../controllers/EmptyCollection.js"
+import { AddTokenToMarketPlace } from "../controllers/AddTokenToMarketPlace.js";
+import { getLatestNFTs } from "../controllers/topFourListing.js";
+import { getUserNFTs } from "../controllers/allUserMintedItems.js";
+import { getSpellData } from "../controllers/getSpellData.js";
+import { addSpell } from "../controllers/storeSpellinDB.js";
 
 import { fetchAndStoreEventsforListing } from "../controllers/marketplace_listed.js"
 import { fetchAndStoreEventsforPurchasing } from "../controllers/marketplace_purchased.js"
@@ -11,6 +18,46 @@ const router = express.Router();
 router.post("/mint-hero", mintHero);
 
 router.post("/hero-collection", heroCollection);
+router.post("/update-hero", updateHero);
+
+router.post("/empty-collection", emptyCollection);
+
+router.post("/mint-nft", mintNFT);
+
+
+router.post("/add-token", AddTokenToMarketPlace);
+router.post("/add-spell", addSpell)
+
+//get latest 4 nfts data
+router.get("/latest-nfts", async (req, res) => {
+  try {
+    const nfts = await getLatestNFTs(4);
+    res.json(nfts);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post("/user-nfts", async (req, res) => {
+  const address = req.body.address;
+  try {
+    const nfts = await getUserNFTs(address);
+    res.json(nfts);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post("/user-spell", async (req, res) => {
+  const address = req.body.address;
+  try {
+    const nfts = await getSpellData(address);
+    console.log(nfts);
+    res.json(nfts);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 //marketplace-listed
 router.post("/marketplace-listed", async (req, res) => {
