@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@lighthouse-web3/sdk": "^0.4.2",
     "node": "^24.9.0"
   }
 }
