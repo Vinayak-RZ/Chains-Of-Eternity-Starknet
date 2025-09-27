@@ -24,7 +24,7 @@ MonoBehaviour:
     criticalRate: 10
     criticalDamage: 50
   defensiveStats:
-    maxHealth: 200
+    maxHealth: 350
     defense: 0
     healthRegeneration: 1
     resistances: 

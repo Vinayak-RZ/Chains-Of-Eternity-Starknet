@@ -25,7 +25,7 @@ public static class DojoActions
         return tx;
     }
 
-    public static async Task<FieldElement> UpdatePlayerState(
+    public static async Task<FieldElement>  UpdatePlayerState(
         PlayerFSMState state,
         ushort pos_x,
         ushort pos_y,
@@ -96,7 +96,14 @@ public static class DojoActions
         Debug.Log($"✅ Spell created successfully. Tx: {tx.Inner}");
         return tx;
     }
-
+    public static async Task<FieldElement> DamageEnemy(FieldElement enemy_id,ushort damage)
+    {
+        EnsureReady();
+        Debug.Log("🪄 Unequipping spell...");
+        var tx = await Actions.enemy_damaged(Account,enemy_id, damage);
+        Debug.Log($"✅ Spell unequipped. Tx: {tx.Inner}");
+        return tx;
+    }
     public static async Task<FieldElement> EquipSpell(FieldElement spell_id)
     {
         EnsureReady();
@@ -105,13 +112,38 @@ public static class DojoActions
         Debug.Log($"✅ Spell equipped. Tx: {tx.Inner}");
         return tx;
     }
-
+    public static async Task<FieldElement> CreateEnemy(int pos_x, int pos_y, sbyte enemy_type)
+    {
+        EnsureReady();
+        Debug.Log("👹 Creating enemy...");
+        var tx = await Actions.spawn_enemy(Account, pos_x, pos_y, enemy_type);
+        Debug.Log($"✅ Enemy created. Tx: {tx.Inner}");
+        return tx;
+    }
+    public static async Task<FieldElement> EnemyKilled(FieldElement enemy_id)
+    {
+        EnsureReady();
+        Debug.Log("👹 Enemy dying...");
+        var tx = await Actions.enemy_killed(Account, enemy_id);
+        Debug.Log($"✅ Enemy died. Tx: {tx.Inner}");
+        return tx;
+    }
     public static async Task<FieldElement> TakeDamage(ushort damage)
     {
         EnsureReady();
         Debug.Log("💥 Applying damage...");
         var tx = await Actions.take_damage(Account, damage);
         Debug.Log($"✅ Damage applied. Tx: {tx.Inner}");
+        return tx;
+    }
+    public static async Task<FieldElement> FireSpell(
+        FieldElement spell_id, int origin_x, int origin_y, short direction
+    )
+    {
+        EnsureReady();
+        Debug.Log("💥 Firing Spell...");
+        var tx = await Actions.fire_spell(Account, spell_id,origin_x,origin_y,direction);
+        Debug.Log($"✅ Spell Fired. Tx: {tx.Inner}");
         return tx;
     }
 }
