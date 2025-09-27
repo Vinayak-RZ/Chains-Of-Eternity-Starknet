@@ -16,7 +16,7 @@ public class CooldownState : BaseEnemyState
     {
         StopMoving();
         idleTimer = 0f;
-        Debug.Log("Entering cooldown state");
+        Debug.Log("------------------------Entering cooldown state----------------------");
         owner.animator.SetBool("followPlayer", false);
         owner.animator.SetBool("freeRoam", false);
         owner.animator.SetBool("isAttacking", false);
@@ -32,10 +32,10 @@ public class CooldownState : BaseEnemyState
         {
             if (owner.CanSeePlayer())
             {
-                Debug.Log("Player detected, transitioning to follow state");
+                //Debug.Log("Player detected, transitioning to follow state");
                 stateMachine.ChangeState(owner.FollowState);
-            }
-            Debug.Log("Idle duration reached, transitioning to free roaming state");
+            }else
+            //Debug.Log("Idle duration reached, transitioning to free roaming state");
             stateMachine.ChangeState(owner.FreeRoamingState);
 
         }
