@@ -46,7 +46,7 @@ public class DefensiveStats
 public class SpecialStats
 {
     public int maxEnergy = 100;
-    public int energyRegeneration = 10;
+    public int energyRegeneration = 5;
     public int maxMana = 100;
-    public int manaRegeneration = 10;
+    public int manaRegeneration = 5;
 }
