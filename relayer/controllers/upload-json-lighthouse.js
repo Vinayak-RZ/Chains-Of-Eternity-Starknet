@@ -237,3 +237,76 @@ export const shareFileAccess = async (req, res) => {
     return res.status(500).json({ success: false, message: err.message });
   }
 };
+
+/**
+ * Revoke file access
+ * Expects: { cid, publicKey, signedMessage, revokeFrom }
+ */
+export const revokeFileAccess = async (req, res) => {
+  try {
+    const { cid, publicKey, signedMessage, revokeFrom } = req.body;
+
+    if (!cid || !publicKey || !signedMessage || !revokeFrom?.length) {
+      return res.status(400).json({
+        success: false,
+        message: "cid, publicKey, signedMessage and revokeFrom[] are required",
+      });
+    }
+
+    // 1️⃣ Call Lighthouse revoke
+    const revokeResponse = await lighthouse.revokeFileAccess(
+      publicKey,
+      revokeFrom, // array of wallet addresses to revoke
+      cid,
+      signedMessage
+    );
+
+    // 2️⃣ Remove from SpellOwnership
+    await pool.query(
+      `DELETE FROM SpellOwnership 
+       WHERE spell_cid = $1 AND address = ANY($2::text[])`,
+      [cid, revokeFrom]
+    );
+
+    return res.json({
+      success: true,
+      data: revokeResponse.data,
+    });
+  } catch (err) {
+    console.error("revokeFileAccess error:", err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+import pool from "../db.js";
+
+/**
+ * Get all spells owned/borrowed/bought by an account
+ * Expects: /api/spells/:address
+ */
+export const getAccountSpells = async (req, res) => {
+  try {
+    const { address } = req.params;
+
+    if (!address) {
+      return res.status(400).json({ success: false, message: "Address required" });
+    }
+
+    const result = await pool.query(
+      `SELECT spell_cid, role, created_at
+       FROM SpellOwnership
+       WHERE address = $1`,
+      [address]
+    );
+
+    return res.json({
+      success: true,
+      count: result.rows.length,
+      spells: result.rows,
+    });
+  } catch (err) {
+    console.error("getAccountSpells error:", err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
