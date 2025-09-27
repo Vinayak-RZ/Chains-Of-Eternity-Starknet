@@ -13,7 +13,8 @@ import { BidOnItem } from '../controllers/BidOnItem.js';
 import { fetchAndStoreEventsforListing } from "../controllers/marketplace_listed.js"
 import { fetchAndStoreEventsforPurchasing } from "../controllers/marketplace_purchased.js"
 import { BuyItem } from '../controllers/BuyItem.js';
-
+import { ScheduleAuction } from '../controllers/ScheduleAuction.js';
+import { ListedAuction } from '../controllers/Auction.js';
 const router = express.Router();
 
 router.post("/mint-hero", mintHero);
@@ -32,7 +33,7 @@ router.post("/bid-item", BidOnItem)
 
 router.post("/schedule-auctions", ScheduleAuction)
 router.post("/list-auction", ListedAuction);
-
+router.post("/buy-item", BuyItem)
 
 //get latest 4 nfts data
 router.get("/latest-nfts", async (req, res) => {
