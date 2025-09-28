@@ -1,13 +1,9 @@
 
 # Arcane: Chains of Eternity
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/8cc57729-c792-432a-9f85-86da54cdee92" alt="Arcane: Chains of Eternity Logo" width="300">
-</div>
-
 ---
 
-## 🌌 Overview
+## Overview
 
 **Arcane: Chains of Eternity** is a blockchain-powered fantasy RPG built with **Unity** that blends immersive gameplay with decentralized infrastructure.  
 The project was developed for a hackathon and demonstrates how **on-chain assets**, **data monetization**, and **decentralized automation** can enhance modern gaming.
@@ -16,30 +12,30 @@ Players venture into a mystical world, casting spells, battling enemies, and tra
 
 ---
 
-## ✨ Core Features
+## Core Features
 
-- **🎮 Unity-based RPG Gameplay**  
+- ** Unity-based RPG Gameplay**  
   - Built on a **state machine architecture** for both player and enemy AI.
   - Real-time combat, quests, and collectible spell mechanics.
 
-- **🔗 Flow Blockchain Integration**  
+- ** Flow Blockchain Integration**  
   - **Cadence smart contracts** for spells, items, marketplace, and auction house.  
   - **Scheduled transactions** enable automated marketplace settlements, auctions, and periodic rewards (cron-like behavior).
 
-- **🪄 Spell Data Monetization with Lighthouse**  
+- ** Spell Data Monetization with Lighthouse**  
   - Spells start with equal base value.  
   - Demand-driven growth using **DataCoin**.  
   - Lighthouse SDK for **encryption, access control, and monetization** of spell data.
 
-- **🌐 Identity with ENS**  
+- ** Identity with ENS**  
   - Players can name their NFTs/items with **ENS names**.  
   - Improves immersion and makes player lookup easier (instead of hex addresses).
 
-- **💸 Marketplace & Auction House**  
+- ** Marketplace & Auction House**  
   - Fully on-chain marketplace with **scheduled completion** of auctions.  
   - Rewards distributed automatically without manual intervention.
 
-- **📦 Modular Infrastructure**  
+- ** Modular Infrastructure**  
   - **Thirdweb & FCL** → Wallet connections.  
   - **Express** → Relayer service.  
   - **Supabase** → Database for off-chain storage.  
@@ -78,7 +74,7 @@ Our project was made possible with the support of several key blockchain ecosyst
   * Seamless integration with the wider Ethereum ecosystem, where ENS is widely supported.
 
 ---
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Game Engine**: Unity (C#)
 - **Wallet Connections**: Thirdweb, FCL (Flow Client Library)
@@ -90,7 +86,7 @@ Our project was made possible with the support of several key blockchain ecosyst
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - [Unity 2023.3+](https://unity.com/)
@@ -134,7 +130,7 @@ Our project was made possible with the support of several key blockchain ecosyst
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Arcane-Chains-of-Eternity/
@@ -152,22 +148,21 @@ Arcane-Chains-of-Eternity/
 
 ---
 
-## 🌍 Vision
+## Vision
 
 Arcane: Chains of Eternity isn’t just a game — it’s an experiment in combining **gameplay depth** with **decentralized systems**.
 Our goal is to create a world where spells, items, and player identities hold **real value**, controlled and owned by the community.
 
 ---
 
-## 🤝 Contributors
+## Contributors
 
 * Built by a passionate team during a hackathon.
 * Open for collaboration and future development!
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License.
 
-```
