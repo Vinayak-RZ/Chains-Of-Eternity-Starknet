@@ -10,14 +10,16 @@ public class FreeRoamingState : BaseEnemyState
     public override void Enter()
     {
         roamTarget = owner.GetRandomRoamPosition();
-        owner.animator.SetBool("isWalking", true);
+        owner.animator.SetBool("freeRoam", true);
+        owner.animator.SetBool("followPlayer", false);
+        owner.animator.SetBool("isAttacking", false);
     }
 
     public override void LogicUpdate()
     {
         //Debug.Log("Free roaming state active");
         
-        MoveTowards(roamTarget);
+        MoveTowards(roamTarget, owner.MoveSpeed);
 
         if (owner.CanSeePlayer())
         {
@@ -26,8 +28,6 @@ public class FreeRoamingState : BaseEnemyState
         }
         else if (Vector2.Distance(owner.transform.position, roamTarget) < 0.2f)
         {
-            Debug.Log(owner.transform.position);
-            Debug.Log(roamTarget);
             //Debug.Log("Reached roam target, switching to idle state");
             stateMachine.ChangeState(owner.IdleState);
         }
