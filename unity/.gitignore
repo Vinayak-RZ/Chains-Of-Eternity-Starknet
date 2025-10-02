@@ -1,0 +1,7 @@
+Library/*
+Logs/*
+Temp/*
+obj/*
+.vscode/*
+Logs/*
+\nLogs/\n*.log
