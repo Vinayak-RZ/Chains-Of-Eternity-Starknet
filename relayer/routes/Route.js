@@ -9,7 +9,7 @@ import { getLatestNFTs } from "../controllers/topFourListing.js";
 import { getUserNFTs } from "../controllers/allUserMintedItems.js";
 import { getSpellData } from "../controllers/getSpellData.js";
 import { addSpell } from "../controllers/storeSpellinDB.js";
-
+import { BidOnItem } from '../controllers/BidOnItem.js';
 import { fetchAndStoreEventsforListing } from "../controllers/marketplace_listed.js"
 import { fetchAndStoreEventsforPurchasing } from "../controllers/marketplace_purchased.js"
 
@@ -27,6 +27,10 @@ router.post("/mint-nft", mintNFT);
 
 router.post("/add-token", AddTokenToMarketPlace);
 router.post("/add-spell", addSpell)
+router.post("/bid-item", BidOnItem)
+router.post("/schedule-auctions", ScheduleAuction)
+router.post("/list-auction", ListedAuction);
+
 
 //get latest 4 nfts data
 router.get("/latest-nfts", async (req, res) => {
