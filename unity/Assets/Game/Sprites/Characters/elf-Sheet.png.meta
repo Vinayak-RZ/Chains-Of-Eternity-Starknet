@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      elf-Sheet_0: -4180327219815112063
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
