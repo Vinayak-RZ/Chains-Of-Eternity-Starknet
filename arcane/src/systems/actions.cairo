@@ -1,5 +1,4 @@
 use starknet::{ContractAddress};
-use core::poseidon;
 use dojo_starter::models::{
     PlayerState, PlayerFSMState, PlayerSpellbook, SpellCore, SpellInstance, 
     GameSession, PlayerStats, Vec2i, SpellElement, AttackSubtype
@@ -358,7 +357,7 @@ use dojo::event::EventStorage;
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
-            self.world(@"arcane")
+            self.world(@"dojo_starter")
         }
 
         fn generate_spell_instance_id(
