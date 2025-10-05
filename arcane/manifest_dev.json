@@ -1480,7 +1480,7 @@
   "contracts": [
     {
       "address": "0x3718c8a4b39b2d6a204454080cc8491c8ee0cbbc7faffde89d128d44411dc23",
-      "class_hash": "0x408d21afc72a006f6d3a5485dd0e4ec7801d48d1a1f8e208081e9dee86266c",
+      "class_hash": "0x72ec59f747f1f99d056bef2a163e125ef02d8d104cbf7babf9e87bc7dab07d2",
       "abi": [
         {
           "type": "impl",
@@ -1627,11 +1627,7 @@
                   "type": "core::integer::i8"
                 }
               ],
-              "outputs": [
-                {
-                  "type": "core::felt252"
-                }
-              ],
+              "outputs": [],
               "state_mutability": "external"
             },
             {
