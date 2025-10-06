@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float moveSpaaaaaaaaaaaeed = 2f;
+    [SerializeField] private float moveSpeed = 2f;
     public String Name = "Enemy";
 
     public NavMeshAgent agent;
@@ -142,20 +142,23 @@ public class Enemy : MonoBehaviour
 
     public void FlipIfNeeded()
     {
-        if (agent.velocity.x != 0)
+        if (Mathf.Abs(agent.velocity.x) < 0.5f)
         {
             bool shouldFlip = (agent.velocity.x > 0 && !IsFacingRight) || (agent.velocity.x < 0 && IsFacingRight);
             if (shouldFlip)
             {
-                Debug.Log("Flipping" + Name);
-                IsFacingRight = !IsFacingRight;
-                RB.transform.Rotate(0f, 180f, 0f);
+                Flip();
             }
         }
+    }
+    public void Flip()
+    {   
+        Debug.Log("Flipping" + Name);
+        IsFacingRight = !IsFacingRight;
+        RB.transform.Rotate(0f, 180f, 0f);
     }
     public virtual void PerformAttack()
     {
         Debug.Log("Base Enemy Attack");
     }
 }
-    
