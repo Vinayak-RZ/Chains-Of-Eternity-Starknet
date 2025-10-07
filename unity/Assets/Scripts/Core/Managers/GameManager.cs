@@ -2,11 +2,11 @@ using DialogueEditor;
 using UnityEngine;
 
 
-public class GameManagery : MonoBehaviour
+public class GameManagerUnity : MonoBehaviour
 {
-    public static GameManagery Instance { get; private set; }
+    public static GameManagerUnity Instance { get; private set; }
 
-    private StateMachine<GameManagery> gameStateMachine;
+    private StateMachine<GameManagerUnity> gameStateMachine;
 
     #region GameManagerReferences
     [SerializeField] private GameObject pauseUI;
@@ -26,7 +26,7 @@ public class GameManagery : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // Persist across scenes
 
-        gameStateMachine = new StateMachine<GameManagery>();
+        gameStateMachine = new StateMachine<GameManagerUnity>();
         statsCanvas = GameObject.FindGameObjectWithTag("StatsCanvas")?.GetComponent<Canvas>();
 
     }

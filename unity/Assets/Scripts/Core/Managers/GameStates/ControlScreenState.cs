@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class ControlScreenState : State<GameManagery>
+public class ControlScreenState : State<GameManagerUnity>
 {
-    public ControlScreenState(GameManagery owner, StateMachine<GameManagery> stateMachine)
+    public ControlScreenState(GameManagerUnity owner, StateMachine<GameManagerUnity> stateMachine)
         : base(owner, stateMachine) { }
 
     public override void Enter()
