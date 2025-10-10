@@ -27,6 +27,7 @@ public class PlayerAttackState : PlayerState
         {
             stateMachine.ChangeState(player.noAttackState);
         }
+
     }
 
     public void OnAttackAnimationComplete()
@@ -39,6 +40,7 @@ public class PlayerAttackState : PlayerState
     {
         player.Animator.SetBool("attacking", false);
         player.EnableHitboxDef(false);
+        attackComplete = true;
         player.ClearHitEnemies();
     }
 }

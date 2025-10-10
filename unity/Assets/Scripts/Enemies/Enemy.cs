@@ -150,22 +150,32 @@ public class Enemy : MonoBehaviour
     {
         //TODO : Handle different damage types (e.g., Physical, Magical)
         int effectiveDamage = Mathf.Max(0, damage);
+
         currentHealth = Mathf.Max(0, currentHealth - effectiveDamage);
+
+        Debug.Log(sourcePos);
+        Debug.Log(transform.position);
+        Debug.Log(transform.position - sourcePos);
+        Vector2 knockbackDirection = ((Vector2)transform.position - (Vector2)sourcePos).normalized;
+        Debug.Log(knockbackDirection);
+        //knockbackDirection = new Vector2(knockbackDirection.x, -knockbackDirection.y);
+        Debug.Log(knockbackDirection);
         if (applyKnockback)
-            ApplyKnockback((transform.position - sourcePos).normalized, applyStun,15f);
+            ApplyKnockback(knockbackDirection, applyStun, 5f);
         if (currentHealth == 0)
             Die();
     }
-    public void ApplyKnockback(Vector2 direction, bool applyStun,float force= 10f,  float duration = 0.2f)
+    public void ApplyKnockback(Vector2 direction, bool applyStun, float force= 0.1f,  float duration = 0.2f)
     {
-        StateMachine.ChangeState(StunState);
         StartCoroutine(KnockbackRoutine(direction, force, duration, applyStun));
     }
     private IEnumerator KnockbackRoutine(Vector2 direction, float force, float duration, bool applyStun)
     {
-        RB.linearVelocity = Vector2.zero;
+        agent.enabled = false;
         RB.AddForce(direction.normalized * force, ForceMode2D.Impulse);
         yield return new WaitForSeconds(duration);
+        RB.linearVelocity = Vector2.zero;
+        agent.enabled = true;
         if (applyStun)
         {
             StateMachine.ChangeState(StunState);
@@ -173,7 +183,7 @@ public class Enemy : MonoBehaviour
         else
         {
             StateMachine.ChangeState(FreeRoamingState); // Return to idle state if not stunned
-        }
+}
     }
     public void FlipIfNeeded()
     {
@@ -188,7 +198,7 @@ public class Enemy : MonoBehaviour
     }
     public void Flip()
     {
-        Debug.Log("Flipping" + Name);
+        //Debug.Log("Flipping" + Name);
         IsFacingRight = !IsFacingRight;
         RB.transform.Rotate(0f, 180f, 0f);
     }
