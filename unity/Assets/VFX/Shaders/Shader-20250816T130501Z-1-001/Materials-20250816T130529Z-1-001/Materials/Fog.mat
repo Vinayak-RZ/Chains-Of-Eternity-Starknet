@@ -60,8 +60,8 @@ Material:
     - _EnableExternalAlpha: 0
     m_Colors:
     - Color_2: {r: 0.43529412, g: 0.5843468, b: 0.8509804, a: 1}
-    - Speed: {r: 0.01, g: 0, b: 0, a: 0}
-    - Speed_2: {r: -0.01, g: 0, b: 0, a: 0}
+    - Speed: {r: 0.04, g: 0, b: 0, a: 0}
+    - Speed_2: {r: 0.04, g: 0, b: 0, a: 0}
     - _Color: {r: 1.7154807, g: 4.4899, b: 4.131139, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

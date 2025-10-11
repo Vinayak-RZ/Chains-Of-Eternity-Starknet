@@ -14,41 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: WaterDiscs
   element: 1
-  category: 0
   visualPrefab: {fileID: 7583309771101132855, guid: cefc61ca73bab874a9bd4643e83d70d1, type: 3}
   manaCost: 30
-  cooldown: 0
-  attackSubtype: 1
+  cooldown: 3
+  attackSubtype: 0
   attackData:
-    aoeData:
-      shape: 0
-      range: 5
-      damagePerTick: 10
-      tickInterval: 1
-      duration: 5
-    projectileData:
-      targetLayerMask:
-        serializedVersion: 2
-        m_Bits: 2048
-      knockbackForce: 5
-      delayBetweenProjectiles: 0.4
-      spawnOffsets: []
-      staggeredLaunchAngle: 0
-      numberOfProjectiles: 3
-      projectileLifeTime: 3.5
-      projectileSpeed: 8
-      damage: 15
-      directions:
-      - {x: 1, y: 0}
-      - {x: 1, y: 0}
-      - {x: 1, y: 0}
-      movementPath: 5
+    aoeData: {fileID: 0}
+    projectileData: {fileID: 11400000, guid: 2bbda83d7926e144d832f3db2b6d83d9, type: 2}
     shortRangeData:
       reachDistance: 2
       arcAngle: 90
       damage: 20
       knockbackForce: 5
-  buffData:
-    buffType: 0
-    duration: 5
-    magnitude: 1.5

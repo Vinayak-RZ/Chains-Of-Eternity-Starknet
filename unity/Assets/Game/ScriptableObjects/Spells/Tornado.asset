@@ -14,43 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: AirTornado
   element: 3
-  category: 0
   visualPrefab: {fileID: 4892515282493710080, guid: df566d538eff44e4c8f6139e343374f6, type: 3}
   manaCost: 30
   cooldown: 0
-  attackSubtype: 1
+  attackSubtype: 0
   attackData:
-    aoeData:
-      shape: 0
-      range: 5
-      damagePerTick: 10
-      tickInterval: 1
-      duration: 5
-    projectileData:
-      targetLayerMask:
-        serializedVersion: 2
-        m_Bits: 2048
-      knockbackForce: 5
-      delayBetweenProjectiles: 0
-      spawnOffsets: []
-      staggeredLaunchAngle: 0
-      numberOfProjectiles: 5
-      projectileLifeTime: 3.5
-      projectileSpeed: 8
-      damage: 20
-      directions:
-      - {x: 0, y: 1}
-      - {x: -0.95, y: 0.309}
-      - {x: -0.588, y: -0.809}
-      - {x: 0.588, y: -0.908}
-      - {x: 0.95, y: 0.309}
-      movementPath: 1
+    aoeData: {fileID: 0}
+    projectileData: {fileID: 11400000, guid: d689db715e4814f47ada09989786e4a1, type: 2}
     shortRangeData:
       reachDistance: 2
       arcAngle: 90
       damage: 20
       knockbackForce: 5
-  buffData:
-    buffType: 0
-    duration: 5
-    magnitude: 1.5

@@ -12,16 +12,27 @@ public class ItemDatabaseObject : ScriptableObject, ISerializationCallbackReceiv
     {
         for (int i = 0; i < ItemObjects.Length; i++)
         {
-            if (ItemObjects[i].data.Id != i)
+            if (ItemObjects[i] != null)
+            {
                 ItemObjects[i].data.Id = i;
+            }
         }
     }
+
     public void OnAfterDeserialize()
     {
-        UpdateID();
+        UpdateID(); // ensures IDs are correct after loading
     }
 
     public void OnBeforeSerialize()
     {
+        UpdateID(); // ensures IDs are fresh before saving
+    }
+
+    public ItemObject GetItemObjectById(int id)
+    {
+        if (id < 0 || id >= ItemObjects.Length)
+            return null;
+        return ItemObjects[id];
     }
 }

@@ -58,11 +58,12 @@ public class InventoryObject : ScriptableObject
         get
         {
             int counter = 0;
-            //Debug.Log("This is slots length " + GetSlots.Length);
+            Debug.Log("This is slots length " + GetSlots.Length);
             for (int i = 0; i < GetSlots.Length; i++)
             {
-                //Debug.Log(i);
-                if (GetSlots[i].item.Id <= -1)
+                Debug.Log(i);
+                //CHanging it to <=0
+                if (GetSlots[i].item.Id <= 0)   
                 {
                     counter++;
                 }
@@ -182,6 +183,7 @@ public class InventorySlot
         {
             if (item.Id >= 0)
             {
+                Debug.Log(item.Id);
                 return parent.inventory.database.ItemObjects[item.Id];
             }
             return null;
@@ -226,3 +228,5 @@ public class InventorySlot
         return false;
     }
 }
+
+

@@ -1,4 +1,3 @@
-using Org.BouncyCastle.Security;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +13,9 @@ public class attackHandler : MonoBehaviour
     [SerializeField] bool flashenemy = true; // Flash the enemy when hit
     [SerializeField] string weaponType = "Physical";
     [SerializeField] private Player player;
+    public BoxCollider2D upHitbox;
+    public BoxCollider2D downHitbox;
+    private PlayerStats playerStats;
 
     private void Awake()
     {
@@ -22,7 +24,7 @@ public class attackHandler : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!attackHitbox.enabled) return;
+        if (!attackHitbox.enabled && !upHitbox.enabled && !downHitbox.enabled) return;
 
         if (enemyLayer == (enemyLayer | (1 << other.gameObject.layer)) &&
             !hitEnemies.Contains(other.gameObject))
@@ -31,13 +33,27 @@ public class attackHandler : MonoBehaviour
             //Debug.Log($"Hit enemy: {other.gameObject.name}");
 
             enemy = other.GetComponentInParent<Enemy>();
-            if(enemy != null)
+            //Players knockbackForce is currently hardcoded to 7, should be changed later
+            if (enemy != null)
             {
-                enemy.TakeDamage(heroData.offensiveStats.damage, player.transform.position, dealsKnockback, dealsStun,flashenemy,weaponType);
+                enemy.TakeDamage(heroData.offensiveStats.damage, player.transform.position, player.knockbackForce, dealsKnockback, dealsStun, flashenemy, weaponType);
             }
+            if (enemy == null)
+            {
+                Debug.Log("Attacking MP Player", other);
+                playerStats = other.GetComponent<PlayerStats>();
+                if (playerStats != null)
+                {
+                    playerStats.TakeDamage(player.Stats.heroData.offensiveStats.damage, transform.position, player.knockbackForce);
+                    Debug.Log("Player takes damage  " + playerStats.heroData.offensiveStats.damage);
+                }
+                else
+                {
+                    Debug.Log("Player stats is null");
+                }
 
-
-            //other.GetComponent<EnemyHealth>()?.TakeDamage(heroData.offensiveStats.attackPower);
+                //other.GetComponent<EnemyHealth>()?.TakeDamage(heroData.offensiveStats.attackPower);
+            }
         }
     }
 
