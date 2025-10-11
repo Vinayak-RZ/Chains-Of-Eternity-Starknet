@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c92f6916f51c84180ccd6986ebd922, type: 3}
   m_Name: empty
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: Empty
   uiDisplay: {fileID: 8995154407686431259, guid: 13b5637fd7e9ae049a6b506eecd631fc, type: 3}
   rarity: 0
   stackable: 0
