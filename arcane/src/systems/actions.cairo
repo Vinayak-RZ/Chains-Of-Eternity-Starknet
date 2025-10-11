@@ -1,118 +1,392 @@
-use dojo_starter::models::{Direction, Position};
+use starknet::{ContractAddress};
+use core::poseidon;
+use dojo_starter::models::{
+    PlayerState, PlayerFSMState, PlayerSpellbook, SpellCore, SpellInstance, 
+    GameSession, PlayerStats, Vec2i, SpellElement, AttackSubtype
+};
 
-// define the interface
+// Define the interface
 #[starknet::interface]
 pub trait IActions<T> {
-    fn spawn(ref self: T);
-    fn move(ref self: T, direction: Direction);
+    fn spawn_player(ref self: T);
+    fn update_player_state(
+        ref self: T, 
+        new_state: PlayerFSMState, 
+        pos_x: i32, 
+        pos_y: i32, 
+        facing_dir: i16, 
+        velocity: i16
+    );
+    fn create_spell(
+        ref self: T,
+        spell_id: felt252,
+        element: SpellElement,
+        attack_subtype: AttackSubtype,
+        damage: u16,
+        knockback: u16,
+        projectile_speed: u16,
+        projectile_size: u16,
+        number_of_projectiles: u8,
+        staggered_angle: i16,
+        zigzag_amplitude: u16,
+        zigzag_frequency: u16,
+        homing_radius: u16,
+        arc_gravity: u16,
+        random_offset: u16,
+        circular_speed: u16,
+        circular_radius: u16,
+        mana_cost: u16,
+        cooldown: u16
+    );
+    fn fire_spell(
+        ref self: T, 
+        spell_id: felt252, 
+        origin_x: i32, 
+        origin_y: i32, 
+        direction: i16
+    ) -> felt252;
+    fn equip_spell(ref self: T, spell_id: felt252);
+    fn create_game_session(ref self: T, player_2: ContractAddress) -> felt252;
+    fn take_damage(ref self: T, damage: u16);
 }
 
-// dojo decorator
+// Dojo contract
 #[dojo::contract]
 pub mod actions {
-    use dojo::event::EventStorage;
+    use core::poseidon;
+use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
-    use dojo_starter::models::{Moves, Vec2};
-    use starknet::{ContractAddress, get_caller_address};
-    use super::{Direction, IActions, Position, next_position};
+    use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
+    use super::{
+        IActions, PlayerState, PlayerFSMState, PlayerSpellbook, SpellCore, 
+        SpellInstance, GameSession, PlayerStats, Vec2i, SpellElement, AttackSubtype
+    };
+
+    // Events
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct PlayerSpawned {
+        #[key]
+        pub player: ContractAddress,
+        pub timestamp: u64,
+    }
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    pub struct Moved {
+    pub struct PlayerStateUpdated {
         #[key]
         pub player: ContractAddress,
-        pub direction: Direction,
+        pub new_state: PlayerFSMState,
+        pub position: Vec2i,
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct SpellFired {
+        #[key]
+        pub caster: ContractAddress,
+        pub instance_id: felt252,
+        pub spell_id: felt252,
+        pub direction: i16,
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct SpellCreated {
+        #[key]
+        pub creator: ContractAddress,
+        pub spell_id: felt252,
+        pub element: SpellElement,
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct GameSessionCreated {
+        #[key]
+        pub session_id: felt252,
+        pub player_1: ContractAddress,
+        pub player_2: ContractAddress,
     }
 
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
-        fn spawn(ref self: ContractState) {
-            // Get the default world.
+        fn spawn_player(ref self: ContractState) {
             let mut world = self.world_default();
-
-            // Get the address of the current caller, possibly the player's address.
             let player = get_caller_address();
-            // Retrieve the player's current position from the world.
-            let position: Position = world.read_model(player);
+            let timestamp = get_block_timestamp();
 
-            // Update the world state with the new data.
-
-            // 1. Move the player's position 10 units in both the x and y direction.
-            let new_position = Position {
-                player, vec: Vec2 { x: position.vec.x + 10, y: position.vec.y + 10 },
+            // Initialize player state
+            let player_state = PlayerState {
+                player,
+                state: PlayerFSMState::Idle,
+                facing_dir: 0,
+                position: Vec2i { x: 0, y: 0 },
+                velocity: 0,
+                last_updated: timestamp,
+                is_alive: true,
             };
 
-            // Write the new position to the world.
-            world.write_model(@new_position);
+            world.write_model(@player_state);
 
-            // 2. Set the player's remaining moves to 100.
-            let moves = Moves {
-                player, remaining: 100, last_direction: Option::None, can_move: true,
+            // Initialize player stats
+            let player_stats = PlayerStats {
+                player,
+                health: 100,
+                max_health: 100,
+                mana: 100,
+                max_mana: 100,
+                spell_damage_dealt: 0,
+                spells_fired: 0,
             };
 
-            // Write the new moves to the world.
-            world.write_model(@moves);
+            world.write_model(@player_stats);
+
+            // Initialize empty spellbook
+            let spellbook = PlayerSpellbook {
+                player,
+                equipped_spells: array![],
+                active_spell_index: 0,
+                cooldowns: array![],
+            };
+
+            world.write_model(@spellbook);
+
+            // Emit event
+            world.emit_event(@PlayerSpawned { player, timestamp });
         }
 
-        // Implementation of the move function for the ContractState struct.
-        fn move(ref self: ContractState, direction: Direction) {
-            // Get the address of the current caller, possibly the player's address.
-
+        fn update_player_state(
+            ref self: ContractState,
+            new_state: PlayerFSMState,
+            pos_x: i32,
+            pos_y: i32,
+            facing_dir: i16,
+            velocity: i16
+        ) {
             let mut world = self.world_default();
+            let player = get_caller_address();
+            
+            // Read existing state
+            let mut state: PlayerState = world.read_model(player);
+            
+            // Update values
+            state.state = new_state;
+            state.position = Vec2i { x: pos_x, y: pos_y };
+            state.facing_dir = facing_dir;
+            state.velocity = velocity;
+            state.last_updated = get_block_timestamp();
 
+            // Write back to world
+            world.write_model(@state);
+
+            // Emit event
+            world.emit_event(@PlayerStateUpdated { 
+                player, 
+                new_state, 
+                position: Vec2i { x: pos_x, y: pos_y } 
+            });
+        }
+
+        fn create_spell(
+            ref self: ContractState,
+            spell_id: felt252,
+            element: SpellElement,
+            attack_subtype: AttackSubtype,
+            damage: u16,
+            knockback: u16,
+            projectile_speed: u16,
+            projectile_size: u16,
+            number_of_projectiles: u8,
+            staggered_angle: i16,
+            zigzag_amplitude: u16,
+            zigzag_frequency: u16,
+            homing_radius: u16,
+            arc_gravity: u16,
+            random_offset: u16,
+            circular_speed: u16,
+            circular_radius: u16,
+            mana_cost: u16,
+            cooldown: u16
+        ) {
+            let mut world = self.world_default();
+            let creator = get_caller_address();
+
+            let spell = SpellCore {
+                spell_id,
+                creator,
+                element,
+                attack_subtype,
+                damage,
+                knockback,
+                projectile_speed,
+                projectile_size,
+                number_of_projectiles,
+                staggered_angle,
+                zigzag_amplitude,
+                zigzag_frequency,
+                homing_radius,
+                arc_gravity,
+                random_offset,
+                circular_speed,
+                circular_radius,
+                mana_cost,
+                cooldown,
+            };
+
+            world.write_model(@spell);
+
+            world.emit_event(@SpellCreated { creator, spell_id, element });
+        }
+
+        fn fire_spell(
+            ref self: ContractState,
+            spell_id: felt252,
+            origin_x: i32,
+            origin_y: i32,
+            direction: i16
+        ) -> felt252 {
+            let mut world = self.world_default();
+            let caster = get_caller_address();
+            let timestamp = get_block_timestamp();
+
+            // Read spell core data
+            let spell_core: SpellCore = world.read_model(spell_id);
+
+            // Generate unique instance ID
+            let instance_id = self.generate_spell_instance_id(caster, timestamp, spell_id);
+
+            // Create spell instance
+            let spell_instance = SpellInstance {
+                instance_id,
+                spell_id,
+                caster,
+                origin: Vec2i { x: origin_x, y: origin_y },
+                direction,
+                timestamp,
+                damage: spell_core.damage,
+                speed: spell_core.projectile_speed,
+                lifetime: 5000, // 5 seconds default
+                is_active: true,
+            };
+
+            world.write_model(@spell_instance);
+
+            // Update player stats
+            let mut stats: PlayerStats = world.read_model(caster);
+            stats.spells_fired += 1;
+            world.write_model(@stats);
+
+            // Emit event
+            world.emit_event(@SpellFired { caster, instance_id, spell_id, direction });
+
+            instance_id
+        }
+
+        fn equip_spell(ref self: ContractState, spell_id: felt252) {
+            let mut world = self.world_default();
             let player = get_caller_address();
 
-            // Retrieve the player's current position and moves data from the world.
-            let position: Position = world.read_model(player);
-            let mut moves: Moves = world.read_model(player);
-            // if player hasn't spawn, read returns model default values. This leads to sub overflow
-            // afterwards.
-            // Plus it's generally considered as a good pratice to fast-return on matching
-            // conditions.
-            if !moves.can_move {
-                return;
+            let mut spellbook: PlayerSpellbook = world.read_model(player);
+            
+            // Add spell to equipped spells if not already there
+            let mut found = false;
+            let mut i = 0;
+            loop {
+                if i >= spellbook.equipped_spells.len() {
+                    break;
+                }
+                if *spellbook.equipped_spells.at(i) == spell_id {
+                    found = true;
+                    break;
+                }
+                i += 1;
+            };
+
+            if !found {
+                spellbook.equipped_spells.append(spell_id);
+                spellbook.cooldowns.append(0);
             }
 
-            // Deduct one from the player's remaining moves.
-            moves.remaining -= 1;
+            world.write_model(@spellbook);
+        }
 
-            // Update the last direction the player moved in.
-            moves.last_direction = Option::Some(direction);
+        fn create_game_session(ref self: ContractState, player_2: ContractAddress) -> felt252 {
+            let mut world = self.world_default();
+            let player_1 = get_caller_address();
+            let timestamp = get_block_timestamp();
 
-            // Calculate the player's next position based on the provided direction.
-            let next = next_position(position, moves.last_direction);
+            // Generate session ID
+            let session_id = self.generate_session_id(player_1, player_2, timestamp);
 
-            // Write the new position to the world.
-            world.write_model(@next);
+            let session = GameSession {
+                session_id,
+                player_1,
+                player_2,
+                started_at: timestamp,
+                is_active: true,
+            };
 
-            // Write the new moves to the world.
-            world.write_model(@moves);
+            world.write_model(@session);
 
-            // Emit an event to the world to notify about the player's move.
-            world.emit_event(@Moved { player, direction });
+            world.emit_event(@GameSessionCreated { session_id, player_1, player_2 });
+
+            session_id
+        }
+
+        fn take_damage(ref self: ContractState, damage: u16) {
+            let mut world = self.world_default();
+            let player = get_caller_address();
+
+            let mut stats: PlayerStats = world.read_model(player);
+            
+            if stats.health > damage {
+                stats.health -= damage;
+            } else {
+                stats.health = 0;
+                
+                // Update player state to dead
+                let mut state: PlayerState = world.read_model(player);
+                state.state = PlayerFSMState::Dead;
+                state.is_alive = false;
+                world.write_model(@state);
+            }
+
+            world.write_model(@stats);
         }
     }
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        /// Use the default namespace "dojo_starter". This function is handy since the ByteArray
-        /// can't be const.
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
-            self.world(@"dojo_starter")
+            self.world(@"arcane")
+        }
+
+        fn generate_spell_instance_id(
+            self: @ContractState, 
+            caster: ContractAddress, 
+            timestamp: u64,
+            spell_id: felt252
+        ) -> felt252 {
+            let mut data: Array<felt252> = array![];
+            data.append(caster.into());
+            data.append(timestamp.into());
+            data.append(spell_id);
+            
+            poseidon::poseidon_hash_span(data.span())
+        }
+
+        fn generate_session_id(
+            self: @ContractState,
+            player_1: ContractAddress,
+            player_2: ContractAddress,
+            timestamp: u64
+        ) -> felt252 {
+            let mut data: Array<felt252> = array![];
+            data.append(player_1.into());
+            data.append(player_2.into());
+            data.append(timestamp.into());
+            
+            poseidon::poseidon_hash_span(data.span())
         }
     }
-}
-
-// Define function like this:
-fn next_position(mut position: Position, direction: Option<Direction>) -> Position {
-    match direction {
-        Option::None => { return position; },
-        Option::Some(d) => match d {
-            Direction::Left => { position.vec.x -= 1; },
-            Direction::Right => { position.vec.x += 1; },
-            Direction::Up => { position.vec.y -= 1; },
-            Direction::Down => { position.vec.y += 1; },
-        },
-    }
-    position
 }
