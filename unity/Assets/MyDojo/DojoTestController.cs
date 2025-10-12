@@ -99,7 +99,7 @@ public class DojoTestController : MonoBehaviour
             pos_y: 200,
             facing_dir: 0,
             velocity: 10
-        );
+        );  
         Debug.Log($"✅ Player state updated. Tx: {txHash.Inner}");
     }
 
