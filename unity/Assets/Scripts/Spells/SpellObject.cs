@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public enum ElementType { Fire, Water, Lightning, Wind }
-public enum AttackSubtype { Projectile, AoE }
+public enum AttackSubtypeunity { Projectile, AoE }
 
 [CreateAssetMenu(fileName = "New Spell", menuName = "Spell System/Spell")]
 public class SpellObject : ScriptableObject
