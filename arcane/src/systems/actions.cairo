@@ -1,5 +1,4 @@
 use starknet::{ContractAddress};
-use core::poseidon;
 use dojo_starter::models::{
     PlayerState, PlayerFSMState, PlayerSpellbook, SpellCore, SpellInstance, 
     GameSession, PlayerStats, Vec2i, SpellElement, AttackSubtype
