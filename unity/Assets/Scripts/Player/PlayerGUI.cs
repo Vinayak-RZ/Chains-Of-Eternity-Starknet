@@ -60,7 +60,7 @@ public class playerstatsGUI : MonoBehaviour
         HealthSlider.value = (float)playerstats.currentHealth.value / maxHealth;
         StaminaSlider.value = (float)playerstats.currentEnergy.value / maxEnergy;
         ManaSlider.value = ((float)playerstats.currentMana.value) / maxMana;
-//        Debug.Log("ManaSliderValue" + ManaSlider.value);     
+        Debug.Log("ManaSliderValue" + ManaSlider.value);     
         // Debug.Log("Health: " + playerstats.currentHealth.value + "/" + maxHealth);
         // Debug.Log("Energy: " + playerstats.currentEnergy.value + "/" + maxEnergy);
         // Debug.Log("Mana: " + playerstats.currentMana.value + "/" + maxMana);
