@@ -131,7 +131,7 @@ public class SpellUpdateSystem : MonoBehaviour
         spellObj.element = ParseElement(spell.element);
         spellObj.manaCost = spell.mana_cost;
         spellObj.cooldown = spell.cooldown;
-        spellObj.attackSubtype = ParseAttackSubtype(spell.attack_subtype);
+        //spellObj.attackSubtype = ParseAttackSubtype(spell.attack_subtype);
 
         // Map to ProjectileData
         projData.damage = spell.damage;
@@ -171,13 +171,13 @@ public class SpellUpdateSystem : MonoBehaviour
         };
     }
 
-    private AttackSubtype ParseAttackSubtype(string subtype)
+    private AttackSubtypeunity ParseAttackSubtype(string subtype)
     {
         return subtype switch
         {
-            "Projectile" => AttackSubtype.Projectile,
-            "AoE" => AttackSubtype.AoE,
-            _ => AttackSubtype.Projectile
+            "Projectile" => AttackSubtypeunity.Projectile,
+            "AoE" => AttackSubtypeunity.AoE,
+            _ => AttackSubtypeunity.Projectile
         };
     }
 }

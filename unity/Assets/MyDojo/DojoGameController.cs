@@ -39,7 +39,7 @@ public class DojoGameController : MonoBehaviour
         // Dummy data
         FieldElement spell_id = new FieldElement(1);
         SpellElement element = new SpellElement.Fire(); // Example enum
-        AttackSubtypeDojo attackSubtype = new AttackSubtypeDojo.Projectile(); // Example enum
+        AttackSubtype attackSubtype = new AttackSubtype.Projectile(); // Example enum
 
         ushort damage = 50;
         ushort knockback = 20;
@@ -81,7 +81,7 @@ public class DojoGameController : MonoBehaviour
                 cooldown
             );
 
-            Debug.Log($"✨ Spell creation tx: {txHash}");
+            Debug.Log($"✨ Spell creation tx: {txHash.Inner} ::: {txHash.ToString()}");
         }
         catch (Exception ex)
         {
