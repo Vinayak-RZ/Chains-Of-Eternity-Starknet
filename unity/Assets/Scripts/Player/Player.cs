@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class Player : MonoBehaviour
 {
+
     [Header("Hero Data")]
     public HeroData heroData; // Drag in via Inspector
 
@@ -29,15 +30,15 @@ public class Player : MonoBehaviour
 
     [Header("State Machine")]
     public StateMachine<Player> stateMachine { get; private set; }
-    public StateMachine<Player> AttackStateMachine { get; private set; } 
+    public StateMachine<Player> AttackStateMachine { get; private set; }
 
     // Player States (Add more later)
     public PlayerIdleState idleState { get; private set; }
     public PlayerMoveState moveState { get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerStunState stunState { get; private set; }
-    public PlayerAttackState attackState { get; private set; } 
-    public PlayerNoAttackState noAttackState { get; private set; } 
+    public PlayerAttackState attackState { get; private set; }
+    public PlayerNoAttackState noAttackState { get; private set; }
     public PlayerSpellState spellState { get; private set; } // For future use, e.g., casting spells
 
     // public PlayerAttackState attackState { get; private set; } // for future
@@ -45,15 +46,19 @@ public class Player : MonoBehaviour
     [Header("Components")]
     public Rigidbody2D RB { get; private set; }
     public Animator Animator { get; private set; }
-
+    public SpriteRenderer spriteRenderer { get; private set; }
     private attackHandler attackHandler; // Reference to the attack handler script
 
     [SerializeField] private BoxCollider2D attackHitbox; // Reference to the attack hitbox GameObject
     [SerializeField] private LayerMask enemyLayer;
+    private GameObject playerObject;
     public Vector2 CurrentVelocity => RB.linearVelocity;
     public bool IsFacingRight = true;
     private float RegenTimer = 0f;
     public bool isInvincible = false; // For future use, e.g., after taking damage
+    private bool flash = true; // Flash on hit effect
+    private Transform _cameraTransform;
+    private Transform spawnPoint;
 
     private void Awake()
     {
@@ -63,10 +68,10 @@ public class Player : MonoBehaviour
         currentHealth = heroData.defensiveStats.maxHealth;
         currentMana = heroData.specialStats.maxMana;
         currentEnergy = heroData.specialStats.maxEnergy;
-
+        _cameraTransform = Camera.main.transform;
         stateMachine = new StateMachine<Player>();
         AttackStateMachine = new StateMachine<Player>();
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
         attackHandler = GetComponentInChildren<attackHandler>();
 
         idleState = new PlayerIdleState(this, stateMachine);
@@ -75,17 +80,19 @@ public class Player : MonoBehaviour
         stunState = new PlayerStunState(this, stateMachine);
         attackState = new PlayerAttackState(this, AttackStateMachine);
         noAttackState = new PlayerNoAttackState(this, AttackStateMachine);
-        spellState = new PlayerSpellState(this, stateMachine); 
+        spellState = new PlayerSpellState(this, stateMachine);
+
+        spawnPoint = GetComponent<Transform>();
     }
     private void Start()
     {
         AttackStateMachine.Initialize(noAttackState); // Start with no attack state
         stateMachine.Initialize(idleState);
-    }   
+    }
     private void Update()
     {
 
-        Debug.Log(AttackStateMachine.CurrentState.ToString());
+        //Debug.Log(AttackStateMachine.CurrentState.ToString());
 
         stateMachine.HandleInput();
         stateMachine.LogicUpdate();
@@ -142,18 +149,35 @@ public class Player : MonoBehaviour
     {
         isInvincible = isInvincibleee;
     }
-    public void TakeDamage(int damage, Vector3 sourcePos, bool applyKnockback = true, bool applyStun = true, string damageType = "Physical")
+    public void TakeDamage(int damage, Vector3 sourcePos,float knockbackForce=10f, bool applyKnockback = true, bool applyStun = true, string damageType = "Physical")
     {
         if (isInvincible) return; // Ignore damage if invincible
         //TODO : Handle different damage types (e.g., Physical, Magical)
         int effectiveDamage = Mathf.Max(0, damage - heroData.defensiveStats.defense);
         currentHealth = Mathf.Max(0, currentHealth - effectiveDamage);
         if (applyKnockback)
-            ApplyKnockback((transform.position - sourcePos).normalized, 15f, applyStun);
+        {
+            ApplyKnockback((transform.position - sourcePos).normalized, knockbackForce, applyStun);
+            if (knockbackForce > 10f)
+                ShakeCamera();// Shake camera 
+
+            if (flash)
+                StartCoroutine(FlashOnHit());
+        }
+
         if (currentHealth == 0)
             Die();
     }
+    private IEnumerator FlashOnHit()
+    {
+        
+        if (spriteRenderer == null) yield break; // No sprite renderer to flash
 
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = Color.red*2; // Flash color
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = originalColor; // Reset to original color
+    }
     public void UseMana(int amount)
     {
         currentMana = Mathf.Max(0, currentMana - amount);
@@ -175,6 +199,28 @@ public class Player : MonoBehaviour
             InputManager.Instance.DisableInput();
         }
     }
+    public void ShakeCamera(float duration = 0.1f, float magnitude = 0.2f)
+    {
+        StartCoroutine(ShakeCameraCoroutine(duration, magnitude));
+    }
+    public IEnumerator ShakeCameraCoroutine(float duration, float magnitude)
+    {
+        Vector3 originalLocalPosition = _cameraTransform.localPosition;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * magnitude;
+            _cameraTransform.localPosition = originalLocalPosition + new Vector3(randomOffset.x, randomOffset.y, 0f);
+
+            yield return null;
+        }
+
+        _cameraTransform.localPosition = originalLocalPosition; // Reset to local position
+    }
+
     public void RegenerateResources()
     {
         currentHealth = Mathf.Min(heroData.defensiveStats.maxHealth, currentHealth + heroData.defensiveStats.healthRegeneration);
@@ -208,13 +254,27 @@ public class Player : MonoBehaviour
                 stateMachine.ChangeState(idleState);
         }
     }
-
     private void Die()
     {
         // Add animation, disable movement, etc.
         Debug.Log($"{heroData.playerName} has died.");
+        playerObject = gameObject;
+        playerObject.SetActive(false);
+
+        respawn();
     }
 
+    public void respawn()
+    {
+        currentHealth = heroData.defensiveStats.maxHealth;
+        currentEnergy = heroData.specialStats.maxEnergy;
+        currentMana = heroData.specialStats.maxMana;
+        playerObject.transform.position = spawnPoint.position;
+        stateMachine.Initialize(idleState);
+
+
+        playerObject.SetActive(true);
+    }
     internal void Move(float inputX)
     {
         throw new NotImplementedException();
