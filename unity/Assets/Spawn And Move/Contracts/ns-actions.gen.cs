@@ -10,7 +10,7 @@ using System.Linq;
 using Enum = Dojo.Starknet.Enum;
 
 // System definitions for `ns-actions` contract
-public class Actions : MonoBehaviour
+public class Actions1 : MonoBehaviour
 {
     // The address of this contract
     public string contractAddress;
