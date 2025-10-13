@@ -3,7 +3,7 @@
 # All entity updates from StoreSetRecord events will be persisted by default, as no filters are applied to models or namespaces.
 # Replace placeholders like world_address and rpc with your actual values.
 
-world_address = "0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"  # The address of the Dojo world contract to index
+world_address = "0x00e6ac414999d107d9fef1a4ec42a8fcce82faeeda3dc1194cbc150fba81f097"  # The address of the Dojo world contract to index
 rpc = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2"  # RPC endpoint for fetching blockchain data
 
 db_dir = "./torii-db"  # Directory for persistent SQLite database (change to your preferred path; omit for in-memory, non-persistent mode)
