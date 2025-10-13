@@ -43,7 +43,7 @@ pub trait IActions<T> {
         origin_x: i32, 
         origin_y: i32, 
         direction: i16
-    ) -> felt252;
+    );
     fn equip_spell(ref self: T, spell_id: felt252);
     fn create_game_session(ref self: T, player_2: ContractAddress) -> felt252;
     fn take_damage(ref self: T, damage: u16);
@@ -182,7 +182,7 @@ use dojo::event::EventStorage;
             world.emit_event(@PlayerStateUpdated { 
                 player, 
                 new_state, 
-                position: Vec2i { x: pos_x, y: pos_y } 
+                position: Vec2i { x: pos_x, y: pos_y }
             });
         }
 
@@ -243,7 +243,7 @@ use dojo::event::EventStorage;
             origin_x: i32,
             origin_y: i32,
             direction: i16
-        ) -> felt252 {
+        ) {
             let mut world = self.world_default();
             let caster = get_caller_address();
             let timestamp = get_block_timestamp();
@@ -276,9 +276,7 @@ use dojo::event::EventStorage;
             world.write_model(@stats);
 
             // Emit event
-            world.emit_event(@SpellFired { caster, instance_id, spell_id, direction });
-
-            instance_id
+            world.emit_event(@SpellFired { caster, instance_id , spell_id, direction });
         }
 
         fn equip_spell(ref self: ContractState, spell_id: felt252) {
