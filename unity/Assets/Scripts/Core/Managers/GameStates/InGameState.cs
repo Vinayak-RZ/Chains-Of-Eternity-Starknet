@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class InGameState : State<GameManager>
+public class InGameState : State<GameManagerUnity>
 {
-    public InGameState(GameManager owner, StateMachine<GameManager> stateMachine)
+    public InGameState(GameManagerUnity owner, StateMachine<GameManagerUnity> stateMachine)
         : base(owner, stateMachine) { }
 
     public override void Enter()

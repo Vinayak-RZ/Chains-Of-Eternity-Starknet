@@ -6,7 +6,7 @@ using UnityEditor;
 namespace DialogueEditor
 {
     [CustomEditor(typeof(NPCConversation))]
-    public class NPCConversationEditor : Editor
+    public class NPCConversationEditor : UnityEditor.Editor
     {
         private static GUIStyle boldStyle;
         private static GUIStyle regularStyle;
@@ -44,7 +44,7 @@ namespace DialogueEditor
     }
 
     [CustomEditor(typeof(NodeEventHolder))]
-    public class NodeEventHolderEditor : Editor
+    public class NodeEventHolderEditor : UnityEditor.Editor
     {
         private NodeEventHolder n;
 

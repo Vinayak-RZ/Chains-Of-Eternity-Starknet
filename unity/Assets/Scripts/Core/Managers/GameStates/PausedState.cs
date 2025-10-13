@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class PausedState : State<GameManager>
+public class PausedState : State<GameManagerUnity>
 {
-    public PausedState(GameManager owner, StateMachine<GameManager> stateMachine)
+    public PausedState(GameManagerUnity owner, StateMachine<GameManagerUnity> stateMachine)
         : base(owner, stateMachine) { }
 
     public override void Enter()

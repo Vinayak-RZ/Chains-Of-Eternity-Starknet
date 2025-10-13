@@ -1,0 +1,27 @@
+[world]
+name = "Arcane"
+description = "The official Dojo Starter guide, the quickest and most streamlined way to get your Dojo Autonomous World up and running. This guide will assist you with the initial setup, from cloning the repository to deploying your world."
+cover_uri = "file://assets/cover.png"
+icon_uri = "file://assets/icon.png"
+website = "https://github.com/dojoengine/dojo-starter"
+seed = "raj210809"
+
+[world.socials]
+x = "https://x.com/ohayo_dojo"
+discord = "https://discord.gg/FB2wR6uF"
+github = "https://github.com/dojoengine/dojo-starter"
+telegram = "https://t.me/dojoengine"
+
+[namespace]
+default = "dojo_starter"
+
+[env]
+rpc_url = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2"
+rpc_version = "0.8.1"
+# Default account for katana with seed = 0
+account_address = "0x0444f4770e09f24573f9418a93baf9c753598d7230c93bf5c686f7923892bfee"
+private_key = "0x029f1fb5ab54943df6019034f7dde295d6cd16c5614c7bf544bbab001194acda"
+world_address = "0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"
+
+[writers]
+"dojo_starter" = ["dojo_starter-actions"]
