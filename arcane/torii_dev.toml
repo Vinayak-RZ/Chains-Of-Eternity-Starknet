@@ -1,8 +1,12 @@
+rpc = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2"
+
 [indexing]
 contracts = [
-  "erc20:0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7", # ETH fee token
-  "erc20:0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d", # STRK fee token
+  "WORLD:0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"
 ]
-[sql]
-historical = ["dojo_starter-Moves", "dojo_starter-Moved"]
+pending = false
+transactions = true
+namespaces = []
+models = []
+world_block = 0
 

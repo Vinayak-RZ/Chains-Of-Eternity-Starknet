@@ -21,7 +21,7 @@ rpc_version = "0.8.1"
 # Default account for katana with seed = 0
 account_address = "0x0444f4770e09f24573f9418a93baf9c753598d7230c93bf5c686f7923892bfee"
 private_key = "0x029f1fb5ab54943df6019034f7dde295d6cd16c5614c7bf544bbab001194acda"
-# world_address = "0x06171ed98331e849d6084bf2b3e3186a7ddf35574dd68cab4691053ee8ab69d7"
+world_address = "0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"
 
 [writers]
 "dojo_starter" = ["dojo_starter-actions"]
