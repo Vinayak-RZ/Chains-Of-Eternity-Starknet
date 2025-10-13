@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: FireBullet
   element: 0
+  spell_id:
+    hex: 0x0000000000000000000000000000000000000000000000000000000000000001
   visualPrefab: {fileID: 718544881489533443, guid: e91a73ec04d1cd640aad2a59b350b941, type: 3}
   manaCost: 20
   cooldown: 2

@@ -25,7 +25,7 @@ public static class DojoActions
         return tx;
     }
 
-    public static async Task<FieldElement> UpdatePlayerState(
+    public static async Task<FieldElement>  UpdatePlayerState(
         PlayerFSMState state,
         ushort pos_x,
         ushort pos_y,
@@ -112,6 +112,16 @@ public static class DojoActions
         Debug.Log("💥 Applying damage...");
         var tx = await Actions.take_damage(Account, damage);
         Debug.Log($"✅ Damage applied. Tx: {tx.Inner}");
+        return tx;
+    }
+    public static async Task<FieldElement> FireSpell(
+        FieldElement spell_id, int origin_x, int origin_y, short direction
+    )
+    {
+        EnsureReady();
+        Debug.Log("💥 Firing Spell...");
+        var tx = await Actions.fire_spell(Account, spell_id,origin_x,origin_y,direction);
+        Debug.Log($"✅ Spell Fired. Tx: {tx.Inner}");
         return tx;
     }
 }
