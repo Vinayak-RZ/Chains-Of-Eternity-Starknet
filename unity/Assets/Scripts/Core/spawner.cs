@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using PurrNet;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -9,6 +11,14 @@ public class Spawner : MonoBehaviour
     [Header("Spawn Area")]
     public Vector2 spawnAreaSize = new Vector2(10f, 10f); // Width and height of the spawn area
 
+
+     private async void Start()
+    {
+        // Wait until DojoManager is initialized
+        while (!DojoManager.Instance.IsInitialized)
+            await Task.Yield();
+
+    }
     void Update()
     {
         foreach (var spawnable in spawnables)
@@ -32,12 +42,30 @@ public class Spawner : MonoBehaviour
         );
 
         Vector2 spawnPosition = (Vector2)transform.position + offset;
-
-        GameObject obj = Instantiate(s.prefab, spawnPosition, Quaternion.identity);
+        
+        GameObject obj = UnityProxy.InstantiateDirectly(s.prefab, spawnPosition, Quaternion.identity);
         s.currentCount++;
-
+        _= CallEnemySpawn();
         // Optional: Handle death/cleanup to decrement count later
         // obj.GetComponent<SpawnedObject>()?.Init(() => s.currentCount--);
+    }
+    private async Task CallEnemySpawn()
+    {
+        try
+        {
+            // This runs asynchronously without blocking gameplay
+            var result = await DojoActions.CreateEnemy(
+                pos_x: (ushort)transform.position.x,
+                pos_y: (ushort)transform.position.y,
+                enemy_type: (sbyte)0 // Default enemy type
+            );
+
+            Debug.Log($"✅ Enemy spawned. Tx: {result.Inner}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ Error spawning enemy: {ex.Message}");
+        }
     }
     void OnDrawGizmosSelected()
     {
