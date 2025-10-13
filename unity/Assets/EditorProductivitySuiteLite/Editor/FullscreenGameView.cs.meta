@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f6fd81028891f49d6b82ba11cfcb3b30
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329895
+  packageName: Editor Productivity Suite Lite
+  packageVersion: 1.0.0
+  assetPath: Assets/EditorProductivitySuiteLite/Editor/FullscreenGameView.cs
+  uploadId: 791200

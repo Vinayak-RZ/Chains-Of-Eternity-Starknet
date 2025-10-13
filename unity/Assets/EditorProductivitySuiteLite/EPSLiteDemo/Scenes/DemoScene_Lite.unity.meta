@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d5aefab0247824efe93026670f7ab575
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329895
+  packageName: Editor Productivity Suite Lite
+  packageVersion: 1.0.0
+  assetPath: Assets/EditorProductivitySuiteLite/EPSLiteDemo/Scenes/DemoScene_Lite.unity
+  uploadId: 791200
