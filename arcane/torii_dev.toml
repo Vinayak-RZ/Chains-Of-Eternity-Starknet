@@ -1,12 +1,35 @@
-rpc = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2"
+# Sample torii.toml for persisting all set records in SQL (SQLite database)
+# This configuration enables persistent storage using a file-based SQLite database.
+# All entity updates from StoreSetRecord events will be persisted by default, as no filters are applied to models or namespaces.
+# Replace placeholders like world_address and rpc with your actual values.
+
+world_address = "0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"  # The address of the Dojo world contract to index
+rpc = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_9/WiJmx2NG7dz1PEyksSPP2"  # RPC endpoint for fetching blockchain data
+
+db_dir = "./torii-db"  # Directory for persistent SQLite database (change to your preferred path; omit for in-memory, non-persistent mode)
 
 [indexing]
-contracts = [
-  "WORLD:0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"
-]
-pending = false
-transactions = true
-namespaces = []
-models = []
-world_block = 0
+polling_interval = 500  # Interval in ms to poll for new data (default: 500)
+max_concurrent_tasks = 100  # Maximum concurrent tasks for indexing (default: 100)
+pending = false  # Do not include pending transactions (default: false)
+transactions = true  # Store transaction data (default: true)
+events_chunk_size = 1024  # Events per RPC request (default: 1024)
+blocks_chunk_size = 10240  # Blocks per DB commit (default: 10240)
 
+[sql]
+cache_size = -500000  # Cache size in KiB (default: -500000, approx. 500MB)
+page_size = 32768  # Page size in bytes (default: 32768)
+wal_autocheckpoint = 10000  # WAL autocheckpoint interval in pages (default: 10000)
+busy_timeout = 60000  # Busy timeout in ms (default: 60000)
+all_model_indices = false  # Do not auto-create indices on all models (default: false; set to true for better query performance at cost of storage)
+
+# Optional: Enable historical data retention for specific models if needed
+# historical = ["namespace-ModelName"]  # e.g., ["game-Position"]
+
+# Other optional sections (uncomment and configure as needed)
+# [metrics]
+# metrics = true
+
+# [server]
+# http_addr = "127.0.0.1"
+# http_port = 8080
