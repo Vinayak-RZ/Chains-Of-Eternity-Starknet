@@ -11,6 +11,7 @@ public class attackHandler : MonoBehaviour
     private Enemy enemy;
     [SerializeField] bool dealsKnockback = true;
     [SerializeField] bool dealsStun = false;
+    [SerializeField] bool flashenemy = true; // Flash the enemy when hit
     [SerializeField] string weaponType = "Physical";
     [SerializeField] private Player player;
 
@@ -32,7 +33,7 @@ public class attackHandler : MonoBehaviour
             enemy = other.GetComponentInParent<Enemy>();
             if(enemy != null)
             {
-                enemy.TakeDamage(heroData.offensiveStats.damage, player.transform.position, dealsKnockback, dealsStun, weaponType);
+                enemy.TakeDamage(heroData.offensiveStats.damage, player.transform.position, dealsKnockback, dealsStun,flashenemy,weaponType);
             }
 
 
