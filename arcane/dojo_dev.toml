@@ -24,4 +24,4 @@ private_key = "0x029f1fb5ab54943df6019034f7dde295d6cd16c5614c7bf544bbab001194acd
 # world_address = "0x043382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32"
 
 [writers]
-"Arcane" = ["Arcane"]
+"arcane_starter" = ["arcane_starter-actions"]
