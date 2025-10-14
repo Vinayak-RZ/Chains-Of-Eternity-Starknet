@@ -110,11 +110,11 @@ public class DojoTestController : MonoBehaviour
     {
         Debug.Log("🧙 Testing create_spell()...");
 
-        FieldElement spell_id = new FieldElement(1);
-        SpellElement element = new SpellElement.Fire();
+        FieldElement spell_id = new FieldElement(2);
+        SpellElement element = new SpellElement.Water();
         AttackSubtype attackSubtype = new AttackSubtype.Projectile();
 
-        ushort damage = 50;
+        ushort damage = 30;
         ushort knockback = 20;
         ushort projectile_speed = 100;
         ushort projectile_size = 5;
