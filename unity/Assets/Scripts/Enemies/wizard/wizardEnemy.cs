@@ -1,5 +1,7 @@
 using Nethereum.Contracts.Standards.ENS.ENSRegistry.ContractDefinition;
+using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class wizardEnemy : Enemy
 {
@@ -7,6 +9,7 @@ public class wizardEnemy : Enemy
     public Transform StartPoint;
     public float projectileSpeed = 5f; // Speed of the magic projectile
     public float magicAttackRange = 10f; // Range for magic attacks
+
 
     public override void PerformAttack()
     {

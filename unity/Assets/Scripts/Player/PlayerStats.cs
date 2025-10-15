@@ -8,6 +8,8 @@ public class PlayerStats : NetworkBehaviour
     [Header("Hero Data")]
     public HeroData heroData; // ScriptableObject reference
     public Animator Animator { get; private set; }
+
+    public bool isServerOn {get; private set;}
     // Synced values
     [SerializeField] public SyncVar<float> currentHealth;
     [SerializeField] public SyncVar<float> currentMana;
@@ -50,8 +52,18 @@ public class PlayerStats : NetworkBehaviour
         currentEnergy.value = heroData.specialStats.maxEnergy;
     }
 
-    [ServerRpc(requireOwnership:false)]
     public void ChangeHealth(float newHealth)
+    {
+        if(isServerOn)
+        {
+            ChangeRPCHealth(newHealth);
+        }else
+        {
+            currentHealth.value = newHealth;
+        }
+    }
+    [ServerRpc(requireOwnership:false)]
+    public void ChangeRPCHealth(float newHealth)
     {
         currentHealth.value = newHealth;
     }
@@ -63,6 +75,14 @@ public class PlayerStats : NetworkBehaviour
         {
             RegenerateResources();
             regenTimer = 0f;
+        }
+        if(NetworkManager.main == null)
+        {
+            isServerOn = false;
+        }
+        else
+        {
+            isServerOn = !NetworkManager.main.isOffline;
         }
     }
 

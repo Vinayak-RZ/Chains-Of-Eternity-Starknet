@@ -17,7 +17,7 @@ public class SpellCaster : MonoBehaviour
             await Task.Yield();
 
         // await DojoActions.CreateSpell();
-        // await DojoActions.SpawnPlayer();
+        await DojoActions.SpawnPlayer();
     }
 
     void Update()
