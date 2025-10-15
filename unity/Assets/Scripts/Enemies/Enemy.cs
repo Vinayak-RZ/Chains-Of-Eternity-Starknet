@@ -6,6 +6,7 @@ using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float followOffset = 0.5f; // Offset to maintain while following the player    
     [Header("Enemy Stats")]
     [SerializeField] private bool isYFlip = false;
+    public Slider enemyslider;
     public int maxHealth = 100;
     public int currentHealth;
     public int damage = 10;
@@ -174,15 +176,15 @@ public class Enemy : MonoBehaviour
         {
             // This runs asynchronously without blocking gameplay
             var result = await DojoActions.DamageEnemy(
-                enemy_id: new FieldElement(UInt32.Parse(gameObject.GetInstanceID().ToString())),
+                enemy_id: new FieldElement((int)transform.position.x),
                 damage: (ushort)damagee
             );
 
-            Debug.Log($"✅ Updated Player State. Tx: {result.Inner}");
+            Debug.Log($"✅ Enemy Take Damage: {result.Inner}");
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"❌ Error updating player state: {ex.Message}");
+            Debug.LogError($"❌ Enemy Take Damage Unabled: {ex.Message}");
         }
     }
     public void Update()
@@ -191,6 +193,10 @@ public class Enemy : MonoBehaviour
         CheckVerticalMovement();
         animator.SetBool("movingUp", movingUp);
         animator.SetBool("movingDown", movingDown);
+        if (enemyslider != null)
+        {
+            enemyslider.value = (float)currentHealth / maxHealth;
+        }
     }
     private IEnumerator SelectingPlayer()
     {
@@ -296,7 +302,8 @@ public class Enemy : MonoBehaviour
             ApplyKnockback(knockbackDirection, applyStun, knockbackForce);
         if (flash)
             StartCoroutine(FlashOnHit());
-        _= CallEnemyTakeDamage(damage);
+        //_= CallEnemyTakeDamage(damage);
+
 
         if (currentHealth == 0 && !hasDied)
             Die();
@@ -378,7 +385,7 @@ public class Enemy : MonoBehaviour
         {
             // This runs asynchronously without blocking gameplay
             var result = await DojoActions.EnemyKilled(
-                enemy_id: new FieldElement(UInt32.Parse(gameObject.GetInstanceID().ToString())) 
+                enemy_id: new FieldElement((int)transform.position.x)
             );
 
             Debug.Log($"✅ Enemy spawned. Tx: {result.Inner}");

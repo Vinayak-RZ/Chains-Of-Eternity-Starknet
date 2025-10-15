@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PurrNet;
+using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Spawner : MonoBehaviour
 {
@@ -11,10 +13,15 @@ public class Spawner : MonoBehaviour
     [Header("Spawn Area")]
     public Vector2 spawnAreaSize = new Vector2(10f, 10f); // Width and height of the spawn area
 
+  private Camera cam;
+    public UnityEngine.Canvas mainCanvas;
 
-     private async void Start()
+    public GameObject EnemyHealthBarPrefab;
+
+    private async void Start()
     {
         // Wait until DojoManager is initialized
+        cam = Camera.main;
         while (!DojoManager.Instance.IsInitialized)
             await Task.Yield();
 
@@ -31,6 +38,7 @@ public class Spawner : MonoBehaviour
                 spawnable.timer = 0f;
             }
         }
+        
     }
 
     void Spawn(Spawnable s)
@@ -42,12 +50,24 @@ public class Spawner : MonoBehaviour
         );
 
         Vector2 spawnPosition = (Vector2)transform.position + offset;
-        
+
         GameObject obj = UnityProxy.InstantiateDirectly(s.prefab, spawnPosition, Quaternion.identity);
+        if (obj.TryGetComponent<Enemy>(out Enemy enemy))
+        {
+            // Initialize the enemy with a reference to the main canvas and health bar prefab
+            Initialize(enemy, EnemyHealthBarPrefab);
+        }
         s.currentCount++;
-        _= CallEnemySpawn();
+        _ = CallEnemySpawn();
         // Optional: Handle death/cleanup to decrement count later
         // obj.GetComponent<SpawnedObject>()?.Init(() => s.currentCount--);
+    }
+    private void Initialize(Enemy enemy, GameObject healthBarPrefab)
+    {
+        GameObject canvasObj = UnityProxy.InstantiateDirectly(mainCanvas.gameObject);
+        UnityEngine.Canvas canvas = canvasObj.GetComponent<UnityEngine.Canvas>();
+        canvasObj.transform.SetParent(mainCanvas.transform, false);
+        enemy.enemyslider = canvasObj.GetComponent<Slider>();
     }
     private async Task CallEnemySpawn()
     {
