@@ -20,6 +20,7 @@ public class HeroData : ScriptableObject
     public OffensiveStats offensiveStats;
     public DefensiveStats defensiveStats;
     public SpecialStats specialStats;
+    public StatPointsAssigned statPointsAssigned;
 }
 
 [System.Serializable]
@@ -49,4 +50,26 @@ public class SpecialStats
     public int energyRegeneration = 5;
     public int maxMana = 100;
     public int manaRegeneration = 5;
+}
+
+[System.Serializable]
+public class StatPointsAssigned
+{
+    public int constitution = 1;
+    public int strength = 1;
+    public int dexterity = 1;
+    public int intelligence = 1;
+    public int stamina = 1;
+    public int agility = 1;
+    public int experience = 0; // Total experience points
+    public int remainingPoints = 0;
+    public void Reset()
+    {
+        constitution = 1;
+        strength = 1;
+        dexterity = 1;
+        intelligence = 1;
+        stamina = 1;
+        agility = 1;
+    }
 }

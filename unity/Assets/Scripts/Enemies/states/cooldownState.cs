@@ -32,10 +32,10 @@ public class CooldownState : BaseEnemyState
         {
             if (owner.CanSeePlayer())
             {
-                //Debug.Log("Player detected, transitioning to follow state");
+                Debug.Log("Player detected, transitioning to follow state");
                 stateMachine.ChangeState(owner.FollowState);
             }else
-            //Debug.Log("Idle duration reached, transitioning to free roaming state");
+            Debug.Log("Idle duration reached, transitioning to free roaming state");
             stateMachine.ChangeState(owner.FreeRoamingState);
 
         }

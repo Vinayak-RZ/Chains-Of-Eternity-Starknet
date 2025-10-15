@@ -4,6 +4,7 @@ using UnityEngine;
 public class AttackState : BaseEnemyState
 {
     private float attackCooldown;
+    private bool attacked = false;
     private float attackTimer;
     private bool isAnimationTriggered = false;
 
@@ -12,11 +13,12 @@ public class AttackState : BaseEnemyState
 
     public override void Enter()
     {
+        owner.performedAttack = false;
         StopMoving();
-        attackTimer = 100f;
-        attackCooldown = owner.AttackCooldown;
+
+
         isAnimationTriggered = false;
-        //owner.animator.SetBool("isAttacking", true);
+        owner.animator.SetBool("isAttacking", true);
         owner.animator.SetBool("followPlayer", false);
         owner.animator.SetBool("freeRoam", false);
     }
@@ -31,16 +33,8 @@ public class AttackState : BaseEnemyState
         
         if (!owner.CanSeePlayer())
         {
-            //Debug.Log("Shifting from attack to free roaming state");
+            Debug.Log("Shifting from attack to free roaming state");
             stateMachine.ChangeState(owner.FreeRoamingState);
-            return;
-        }
-
-        float distanceToPlayer = Vector2.Distance(owner.transform.position, Player.position);
-        if (distanceToPlayer > owner.AttackRange && attackTimer > attackCooldown)
-        {
-            //Debug.Log("Shifting from attack to follow state");
-            stateMachine.ChangeState(owner.FollowState);
             return;
         }
     }
@@ -56,14 +50,16 @@ public class AttackState : BaseEnemyState
         {
             owner.Flip();
         }
-        if (attackTimer >= attackCooldown)
+        if (owner.performedAttack)
         {
             attackTimer = 0f;
             // Disable attack animation until next trigger
-            owner.animator.SetBool("isAttacking", true);
-            owner.animator.SetBool("freeRoam", false);
-            owner.animator.SetBool("followPlayer", false);
-            isAnimationTriggered = false;
+            // owner.animator.SetBool("isAttacking", true);
+            // owner.animator.SetBool("freeRoam", false);
+            // owner.animator.SetBool("followPlayer", false);
+            // isAnimationTriggered = false;
+            Debug.Log("Attack performed, shifting to cooldown state");
+             stateMachine.ChangeState(owner.CooldownState);
         }
     }
 }

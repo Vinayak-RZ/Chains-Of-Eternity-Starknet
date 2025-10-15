@@ -3,7 +3,7 @@ using UnityEngine;
 public class DeathSpell : MonoBehaviour
 {
     [SerializeField] BoxCollider2D spellHitbox;
-    [SerializeField] int spellDamage = 20;
+    [SerializeField] int spellDamage = 25;
     
 
     public void ActivateSpell()
@@ -24,10 +24,10 @@ public class DeathSpell : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Player player = collision.GetComponent<Player>();
+            PlayerStats player = collision.GetComponent<PlayerStats>();
             if (player != null)
             {
-                player.TakeDamage(spellDamage, transform.position, knockbackForce: 0f, applyKnockback: true, applyStun: true, damageType: "Spell");
+                player.TakeDamage(spellDamage, transform.position, knockbackForce: 0f, applyKnockback: true, applyStun: true);
             }
         }
     }

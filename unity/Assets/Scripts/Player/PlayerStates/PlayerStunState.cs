@@ -16,7 +16,7 @@ public class PlayerStunState : PlayerState
         player.Animator.SetBool("walkingDown", false);
         player.Animator.SetBool("dashing", false);
         player.Enable_DisableInput(false); // Disable input
-        player.AttackStateMachine.ChangeState(player.noAttackState);
+        player.attackStateMachine.ChangeState(player.noAttackState);
         startTime = Time.time;
         player.SetVelocity(Vector2.zero); // Optional freeze
     }
@@ -24,7 +24,8 @@ public class PlayerStunState : PlayerState
     {
         base.Exit();
         player.Enable_DisableInput(true); // Re-enable input
-         // Reset animation to idle after stun
+                                          // Reset animation to idle after stun
+         player.spriteRenderer.color = Color.white; // Reset color if it was changed
     }
     public override void LogicUpdate()
     {
