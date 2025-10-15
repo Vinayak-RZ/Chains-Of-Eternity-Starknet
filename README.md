@@ -7,7 +7,12 @@
 
 **ARCANE** is a fully on-chain multiplayer battle arena where every player state, spell, and combat interaction is verified and executed on Starknet using the Dojo ECS framework. This project represents a paradigm shift in blockchain gaming by moving game logic itself onto the blockchain, not just assets.
 
-**Repository:** [Chains-Of-Eternity-Starknet](https://github.com/Vinayak-RZ/Chains-Of-Eternity-Starknet/blob/main)
+
+## Deployed Contract
+
+- **Contract** is deployed at `0x03718c8a4b39b2d6a204454080cc8491c8ee0cbbc7faffde89d128d44411dc23`
+
+- **World** is deployed at `0x00e6ac414999d107d9fef1a4ec42a8fcce82faeeda3dc1194cbc150fba81f097`
 
 ---
 
