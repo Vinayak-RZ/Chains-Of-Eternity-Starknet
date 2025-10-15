@@ -96,7 +96,14 @@ public static class DojoActions
         Debug.Log($"✅ Spell created successfully. Tx: {tx.Inner}");
         return tx;
     }
-
+    public static async Task<FieldElement> DamageEnemy(FieldElement enemy_id,ushort damage)
+    {
+        EnsureReady();
+        Debug.Log("🪄 Unequipping spell...");
+        var tx = await Actions.enemy_damaged(Account,enemy_id, damage);
+        Debug.Log($"✅ Spell unequipped. Tx: {tx.Inner}");
+        return tx;
+    }
     public static async Task<FieldElement> EquipSpell(FieldElement spell_id)
     {
         EnsureReady();
@@ -105,7 +112,22 @@ public static class DojoActions
         Debug.Log($"✅ Spell equipped. Tx: {tx.Inner}");
         return tx;
     }
-
+    public static async Task<FieldElement> CreateEnemy(int pos_x, int pos_y, sbyte enemy_type)
+    {
+        EnsureReady();
+        Debug.Log("👹 Creating enemy...");
+        var tx = await Actions.spawn_enemy(Account, pos_x, pos_y, enemy_type);
+        Debug.Log($"✅ Enemy created. Tx: {tx.Inner}");
+        return tx;
+    }
+    public static async Task<FieldElement> EnemyKilled(FieldElement enemy_id)
+    {
+        EnsureReady();
+        Debug.Log("👹 Enemy dying...");
+        var tx = await Actions.enemy_killed(Account, enemy_id);
+        Debug.Log($"✅ Enemy died. Tx: {tx.Inner}");
+        return tx;
+    }
     public static async Task<FieldElement> TakeDamage(ushort damage)
     {
         EnsureReady();
