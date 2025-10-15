@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 1629297829050403200}
   m_Layer: 11
   m_Name: wizard
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,7 +64,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 41.77, y: 20.45, z: 0}
-  m_LocalScale: {x: 3.28, y: 3.28, z: 3.28}
+  m_LocalScale: {x: 4.4975357, y: 4.4975357, z: 4.4975357}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3597807954420874322}
@@ -243,7 +243,7 @@ MonoBehaviour:
   Name: Enemy
   performedAttack: 0
   agent: {fileID: 0}
-  deathEffect: {fileID: 0}
+  deathEffect: {fileID: 5508670238207069271, guid: c43d4fad23d6d4445b2ae9dee087b0d7, type: 3}
   verticalAngleThreshold: 10
   visionRange: 15
   visionRadius: 0.5
@@ -257,7 +257,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 2097152
-  useBehaviorGraph: 1
   animator: {fileID: 8920417749181368278}
   IsFacingRight: 1
   magicProjectilePrefab: {fileID: 1830325476716934222, guid: b0390d62af66eaf4398495d2ad5e6db8, type: 3}
@@ -328,7 +327,7 @@ MonoBehaviour:
     m_TrimEdge: 0.07
     m_FlipX: 0
     m_FlipY: 0
-    m_InitialTrim: 0.07
+    m_InitialTrim: 0
   m_CastingOption: 1
   m_PreviousTrimEdge: 0.07
   m_PreviousEdgeProcessing: 1

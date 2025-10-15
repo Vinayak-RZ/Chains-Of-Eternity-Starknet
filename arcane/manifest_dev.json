@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
-    "address": "0x43382ba744c8a2ee2a4bef2798588145edbe60750a052ba8f879a1d68d13f32",
-    "seed": "raj210809",
+    "address": "0xe6ac414999d107d9fef1a4ec42a8fcce82faeeda3dc1194cbc150fba81f097",
+    "seed": "raj_210809",
     "name": "Arcane",
     "entrypoints": [
       "uuid",
@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x3ccedd7627e8d5832d1c9bfcf1bf1fc1532722271290b28000be65b19b2644f",
-      "class_hash": "0x6057d1cf437af1778f769f5e80682373604b5795ee03dd6237b3a335faf2a2d",
+      "address": "0x3718c8a4b39b2d6a204454080cc8491c8ee0cbbc7faffde89d128d44411dc23",
+      "class_hash": "0x72ec59f747f1f99d056bef2a163e125ef02d8d104cbf7babf9e87bc7dab07d2",
       "abi": [
         {
           "type": "impl",
@@ -1612,6 +1612,54 @@
             },
             {
               "type": "function",
+              "name": "spawn_enemy",
+              "inputs": [
+                {
+                  "name": "pos_x",
+                  "type": "core::integer::i32"
+                },
+                {
+                  "name": "pos_y",
+                  "type": "core::integer::i32"
+                },
+                {
+                  "name": "enemy_type",
+                  "type": "core::integer::i8"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "enemy_damaged",
+              "inputs": [
+                {
+                  "name": "enemy_id",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "damage",
+                  "type": "core::integer::u16"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "enemy_killed",
+              "inputs": [
+                {
+                  "name": "enemy_id",
+                  "type": "core::felt252"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
               "name": "update_player_state",
               "inputs": [
                 {
@@ -1733,6 +1781,26 @@
                 {
                   "name": "origin_y",
                   "type": "core::integer::i32"
+                },
+                {
+                  "name": "direction",
+                  "type": "core::integer::i16"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "player_attacked",
+              "inputs": [
+                {
+                  "name": "damage",
+                  "type": "core::integer::u16"
+                },
+                {
+                  "name": "attacker",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 },
                 {
                   "name": "direction",
@@ -1900,13 +1968,17 @@
         }
       ],
       "init_calldata": [],
-      "tag": "dojo_starter-actions",
-      "selector": "0x7a1c71029f2d0b38e3ac89b09931d08b6e48417e079c289ff19a8698d0cba33",
+      "tag": "arcane_starter-actions",
+      "selector": "0x79e65d288642294d4eadd69d405cd18225e627b974d59b9db2a396e70441f5a",
       "systems": [
         "spawn_player",
+        "spawn_enemy",
+        "enemy_damaged",
+        "enemy_killed",
         "update_player_state",
         "create_spell",
         "fire_spell",
+        "player_attacked",
         "equip_spell",
         "create_game_session",
         "take_damage",
@@ -1918,71 +1990,101 @@
   "models": [
     {
       "members": [],
+      "class_hash": "0x596ce0243d2358ceaf3138e85b5f42fe3f85957cac65a04fee005dfd7cdc293",
+      "tag": "arcane_starter-Enemy",
+      "selector": "0x7c0c323b1950466a5beb20b489c7cf4e45d86c63e150c4930c121a49c0db7e6"
+    },
+    {
+      "members": [],
       "class_hash": "0x63818fde28416bb860c7bd886186717424d8b6e5fcbd55993a1f7cfc314907d",
-      "tag": "dojo_starter-GameSession",
-      "selector": "0x74d95db9ecc34a64190e46cc67f0e974e12e37003fff5f8e16f25971f6ef12"
+      "tag": "arcane_starter-GameSession",
+      "selector": "0x1d6473a5c2833449ded9e09bf13a7d8a66fd02358c5c48bafe07329a9c306a5"
     },
     {
       "members": [],
       "class_hash": "0x1a31eaf4558a44436f25da37fa648d9206112d2aee366b7e3f4e49cceb21b26",
-      "tag": "dojo_starter-PlayerSpellbook",
-      "selector": "0x7e927d78cd5cb24aa6419e1a3d3c202dc4d83515fca71a08d23818e0d582a83"
+      "tag": "arcane_starter-PlayerSpellbook",
+      "selector": "0x3cbbd25f16f949cde0514f2532de80679d25179cd4781dd7143049962013091"
     },
     {
       "members": [],
       "class_hash": "0x545f26cfc2c2f1ea43e6233e61705fc753b36b32f3527c912cbf3ec60532ffb",
-      "tag": "dojo_starter-PlayerState",
-      "selector": "0x5c4adb9165a19024861b554537c421b6b24f7e6f1de77c91b7ca3c75c3c4340"
+      "tag": "arcane_starter-PlayerState",
+      "selector": "0x69a52dd8430ad74c69bf8f9c4b03739afe540e828bff7450bb7ac5447502a53"
     },
     {
       "members": [],
       "class_hash": "0x736935346e34dc6658fcd325416b0c2e16fa9649d8c5c6375518d6b80543c8a",
-      "tag": "dojo_starter-PlayerStats",
-      "selector": "0x3fa16f4e136c20faceb4888812ba685c403d1ad1816a15b67dc6ccd9b0eb13c"
+      "tag": "arcane_starter-PlayerStats",
+      "selector": "0x96b3164245779f00db2a9720e525d8da10636de507e10039f2b29aef6d86d9"
     },
     {
       "members": [],
       "class_hash": "0x2febe5e694e6b03437dd3d7000cc3d7bdce45fd217b82b3097c27618c749ef3",
-      "tag": "dojo_starter-SpellCore",
-      "selector": "0x3278f4e2c33f272597a7bce80fd2b47306df9be3e64fbe61dd91af2b6239ceb"
+      "tag": "arcane_starter-SpellCore",
+      "selector": "0x7f0b526f9d134fcdbf4831ff48ae3de40f9c6385f51c3b9584e95557d0c435c"
     },
     {
       "members": [],
       "class_hash": "0x55dae9486fb206f3aa0f4ab4948c71d27f8f834dd687fd9e8e83e27d5f257c4",
-      "tag": "dojo_starter-SpellInstance",
-      "selector": "0xd455cf4b2dae1ed6b10066430547562ca12d31ce9b4f2d1ad0d1125008d8b5"
+      "tag": "arcane_starter-SpellInstance",
+      "selector": "0x2e54df404de3cf9805af56297ffb1f73380baf895a385ac914f095756ec5884"
     }
   ],
   "events": [
     {
       "members": [],
+      "class_hash": "0x2e753133824ef34f0aaaf0eaec71319f54fab458bb06278f958084fd8f43af4",
+      "tag": "arcane_starter-EnemyDamaged",
+      "selector": "0xd8dfeb5928ab1bce1f1befd2735650c234ae28cb2ba0dd2d60437f68461f98"
+    },
+    {
+      "members": [],
+      "class_hash": "0x45fc8cf2194ef4e896eb96a99f998649405d15c0d5ebb534dd98e02d6297d90",
+      "tag": "arcane_starter-EnemyKilled",
+      "selector": "0x38e4acad3831a3b9d05e47ba1b51ed27baf700c822e0ef352d98a7df3bc22ab"
+    },
+    {
+      "members": [],
+      "class_hash": "0x521c9430d776bdb9c499ddd4a8ce86eb9327822c901f8415a6a0b8f57062b02",
+      "tag": "arcane_starter-EnemySpawned",
+      "selector": "0x8a300dbd88f2656dc05261982f93df8d000823f1f3eb7d7f41fc43d13849f5"
+    },
+    {
+      "members": [],
       "class_hash": "0x7a1a1709cddbaee081d928233dca7d77e41e5eb6b1a94a9d7da019660f19937",
-      "tag": "dojo_starter-GameSessionCreated",
-      "selector": "0x305761c08d71f6ab523b8c606c9266823e2b43b6bc1e47168bd69c9b3c762c3"
+      "tag": "arcane_starter-GameSessionCreated",
+      "selector": "0xefd2726d825cf700359443d5f7b25bd336ed0ef4e45c47b6360936e521b1d7"
+    },
+    {
+      "members": [],
+      "class_hash": "0x62e992c9d1aa416c431eb8710da4f17934d9c94c2143c20eb75b2f14eefbeb4",
+      "tag": "arcane_starter-PlayerAttacked",
+      "selector": "0x19886cb8dc2bdcdc01162d64886ca407d123ac6752541c27ded7fd2d43bc1dd"
     },
     {
       "members": [],
       "class_hash": "0x489993b878cd8739b204615620e88b78bf3dc578db75873a5fe9e58ee80f734",
-      "tag": "dojo_starter-PlayerSpawned",
-      "selector": "0x5ae774f30c57741d65d258b45cd664de99fec5e031870df61757751a1cece4f"
+      "tag": "arcane_starter-PlayerSpawned",
+      "selector": "0xa61efe40f4cd0ff5a46f52540a41c4a8fbfc8bdf237882d0f045a3215a1d2c"
     },
     {
       "members": [],
       "class_hash": "0x41ba48d7bdb0304105ecb8917d6c58760ba68ba4b04df25089c09b08a8b2e9d",
-      "tag": "dojo_starter-PlayerStateUpdated",
-      "selector": "0x3a81c12c9747aa146a5f5a451e5e075bb1a0fe2c7cf441ae5e4af20223af6e"
+      "tag": "arcane_starter-PlayerStateUpdated",
+      "selector": "0x34d15ea1ba8d6f3809728fd252e30c8a7a236ad8d79b5a53a56acabdb061778"
     },
     {
       "members": [],
-      "class_hash": "0x2169ca70c797880fa34091afb799dde243bc0f4eb359041bc399652f10f2ada",
-      "tag": "dojo_starter-SpellCreated",
-      "selector": "0x34117b550225a3dcdc9d149b992202ea185b0902ee9f6f6c8aaabd8a891dba0"
+      "class_hash": "0x198608db774ac8b9facabf381da1d41265d06ed6691f49360cfdd8ba35dfeed",
+      "tag": "arcane_starter-SpellCreated",
+      "selector": "0x180500e2153fa908dfea4e9d23d4f8851179b612b00d44b5b493c4424cd890b"
     },
     {
       "members": [],
-      "class_hash": "0x480d6cb021b5eb5f96d83b431e3f03ecfb9b434c3930cff846c1699b07bcfa9",
-      "tag": "dojo_starter-SpellFired",
-      "selector": "0x5ac58d8663bf9941492b27f007657ea93b627d2e39f1e1449ef0a59a7b9cc7c"
+      "class_hash": "0x3f6f87430d6ae1d09c001febe0bb542635fb99a62ac222b60815031f677a22e",
+      "tag": "arcane_starter-SpellFired",
+      "selector": "0x421df7282f02202bbd4cca312d23e8c098908424f05ed3bb3e3e9aa5be7acd9"
     }
   ],
   "external_contracts": []

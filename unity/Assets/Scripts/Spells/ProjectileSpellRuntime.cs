@@ -41,7 +41,7 @@ public class ProjectileSpellRuntime : MonoBehaviour
     {
         if (other.transform == caster || other.transform.IsChildOf(caster))
             return;
-        if (((1 << other.gameObject.layer) & data.targetLayerMask) != 0)
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Player")
         {
             ApplyDamageAndKnockback(other.gameObject);
             OnTargetHit?.Invoke(other.gameObject);
