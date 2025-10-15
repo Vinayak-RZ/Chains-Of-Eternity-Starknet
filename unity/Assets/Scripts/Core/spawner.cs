@@ -13,6 +13,7 @@ public class Spawner : MonoBehaviour
     [Header("Spawn Area")]
     public Vector2 spawnAreaSize = new Vector2(10f, 10f); // Width and height of the spawn area
 
+  private Camera cam;
     public UnityEngine.Canvas mainCanvas;
 
     public GameObject EnemyHealthBarPrefab;
@@ -20,6 +21,7 @@ public class Spawner : MonoBehaviour
     private async void Start()
     {
         // Wait until DojoManager is initialized
+        cam = Camera.main;
         while (!DojoManager.Instance.IsInitialized)
             await Task.Yield();
 
@@ -36,6 +38,7 @@ public class Spawner : MonoBehaviour
                 spawnable.timer = 0f;
             }
         }
+        
     }
 
     void Spawn(Spawnable s)
