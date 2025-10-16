@@ -1,36 +1,28 @@
-
 import { Connector } from "@starknet-react/core";
 import { ControllerConnector } from "@cartridge/connector";
-import { ControllerOptions, } from "@cartridge/controller";
-import { SessionPolicies } from '@cartridge/presets';
-//import { constants } from "starknet";
+import { ControllerOptions } from "@cartridge/controller";
+import { SessionPolicies } from "@cartridge/presets";
 
-//const { VITE_PUBLIC_DEPLOY_TYPE } = import.meta.env;
-
-const CONTRACT_ADDRESS_GAME = '0x36a518498c1d7de4106b8904f0878e1e7b78c73614001fba22eba0adca80387'
+const CONTRACT_ADDRESS_GAME = "0x03718c8a4b39b2d6a204454080cc8491c8ee0cbbc7faffde89d128d44411dc23";
 
 const policies: SessionPolicies = {
   contracts: {
     [CONTRACT_ADDRESS_GAME]: {
       methods: [
         { name: "spawn_player", entrypoint: "spawn_player" },
-        { name: "reward_player", entrypoint: "reward_player" },
-        { name: "update_player_ranking", entrypoint: "update_player_ranking" },
-        { name: "update_player_daily_streak", entrypoint: "update_player_daily_streak" },
-        { name: "update_golem_name", entrypoint: "update_golem_name" },
-        { name: "unlock_golem_store", entrypoint: "unlock_golem_store" },
-        { name: "unlock_world_store", entrypoint: "unlock_world_store" },
-        { name: "create_mission", entrypoint: "create_mission" },
-        { name: "update_mission", entrypoint: "update_mission" },
-        { name: "reward_current_mission", entrypoint: "reward_current_mission" },
+        { name: "spawn_enemy", entrypoint: "spawn_enemy" },
+        { name: "enemy_damaged", entrypoint: "enemy_damaged" },
+        { name: "enemy_killed", entrypoint: "enemy_killed" },
+        { name: "update_player_state", entrypoint: "update_player_state" },
+        { name: "create_spell", entrypoint: "create_spell" },
+        { name: "fire_spell", entrypoint: "fire_spell" },
+        { name: "player_attacked", entrypoint: "player_attacked" },
+        { name: "equip_spell", entrypoint: "equip_spell" },
+        { name: "take_damage", entrypoint: "take_damage" },
       ],
     },
   },
-}
-
-// Controller basic configuration
-//const colorMode: ColorMode = "dark";
-//const theme = "golem-runner";
+};
 
 const options: ControllerOptions = {
   chains: [
@@ -40,12 +32,10 @@ const options: ControllerOptions = {
   ],
   policies,
   defaultChainId: "0x534e5f5345504f4c4941",
-  namespace: "arcane", 
-  slot: "arcane_slot", 
+  namespace: "arcane_starter",
+  slot: "arcane_slot",
 };
 
-const cartridgeConnector = new ControllerConnector(
-  options,
-) as never as Connector;
+const cartridgeConnector = new ControllerConnector(options) as never as Connector;
 
 export default cartridgeConnector;
