@@ -26,7 +26,7 @@ public class FreeRoamingState : BaseEnemyState
             //Debug.Log("Player detected, switching to follow state");
             stateMachine.ChangeState(owner.FollowState);
         }
-        else if (Vector2.Distance(owner.transform.position, roamTarget) < 0.2f)
+        else if (Vector2.Distance(owner.transform.position, roamTarget) < 1f)
         {
             //Debug.Log("Reached roam target, switching to idle state");
             stateMachine.ChangeState(owner.IdleState);
