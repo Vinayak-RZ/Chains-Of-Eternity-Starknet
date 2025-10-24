@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,12 +9,19 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private float moveSpeed = 2f;
+    [Header("Enemy Stats")]
+    public int maxHealth = 100;
+    public int currentHealth;
+    public int damage = 10;
+    public float attackSpeed = 1f; // Attacks per second
+    public float AttackRange = 1.5f;
+    public float AttackCooldown = 1f;
+    public float knockbackForce = 5f; // Force applied when knocked back
     public String Name = "Enemy";
 
     public NavMeshAgent agent;
 
-    public float AttackRange = 1.5f;
-    public float AttackCooldown = 1f;
+
 
     // fields for player detection
     [SerializeField] private float visionRange = 5f;
@@ -40,6 +48,7 @@ public class Enemy : MonoBehaviour
     public FreeRoamingState FreeRoamingState { get; private set; }
     public FollowState FollowState { get; private set; }
     public AttackState AttackState { get; private set; }
+    public StunState StunState { get; private set; }
 
     public bool IsFacingRight = true;
 
@@ -54,7 +63,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         RB.freezeRotation = true;
-
+        currentHealth = maxHealth; // Initialize current health to max health
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false; // Disable automatic rotation to control it manually
         agent.updateUpAxis = false; // Disable automatic up-axis adjustment if not needed
@@ -65,7 +74,7 @@ public class Enemy : MonoBehaviour
         FreeRoamingState = new FreeRoamingState(this, StateMachine);
         FollowState = new FollowState(this, StateMachine);
         AttackState = new AttackState(this, StateMachine);
-
+        StunState = new StunState(this, StateMachine);
         StateMachine.Initialize(IdleState);
 
     }
@@ -80,8 +89,6 @@ public class Enemy : MonoBehaviour
         StateMachine?.PhysicsUpdate();
         FlipIfNeeded();
     }
-
-
 
     public bool CanSeePlayer()
     {
@@ -139,7 +146,35 @@ public class Enemy : MonoBehaviour
         }
         return targetPos;
     }
-
+    public void TakeDamage(int damage, Vector3 sourcePos, bool applyKnockback = true, bool applyStun = true, string damageType = "Physical")
+    {
+        //TODO : Handle different damage types (e.g., Physical, Magical)
+        int effectiveDamage = Mathf.Max(0, damage);
+        currentHealth = Mathf.Max(0, currentHealth - effectiveDamage);
+        if (applyKnockback)
+            ApplyKnockback((transform.position - sourcePos).normalized, applyStun,15f);
+        if (currentHealth == 0)
+            Die();
+    }
+    public void ApplyKnockback(Vector2 direction, bool applyStun,float force= 10f,  float duration = 0.2f)
+    {
+        StateMachine.ChangeState(StunState);
+        StartCoroutine(KnockbackRoutine(direction, force, duration, applyStun));
+    }
+    private IEnumerator KnockbackRoutine(Vector2 direction, float force, float duration, bool applyStun)
+    {
+        RB.linearVelocity = Vector2.zero;
+        RB.AddForce(direction.normalized * force, ForceMode2D.Impulse);
+        yield return new WaitForSeconds(duration);
+        if (applyStun)
+        {
+            StateMachine.ChangeState(StunState);
+        }
+        else
+        {
+            StateMachine.ChangeState(FreeRoamingState); // Return to idle state if not stunned
+        }
+    }
     public void FlipIfNeeded()
     {
         if (Mathf.Abs(agent.velocity.x) < 0.5f)
@@ -152,13 +187,26 @@ public class Enemy : MonoBehaviour
         }
     }
     public void Flip()
-    {   
+    {
         Debug.Log("Flipping" + Name);
         IsFacingRight = !IsFacingRight;
         RB.transform.Rotate(0f, 180f, 0f);
     }
+    
+    public void Die()
+    {
+        Debug.Log(Name + " has died.");
+        //TODO: Implement death logic, like playing a death animation, dropping loot, etc.
+        onDeath();
+        Destroy(gameObject); // For now, just destroy the enemy
+    }
     public virtual void PerformAttack()
     {
         Debug.Log("Base Enemy Attack");
+    }
+    public virtual void onDeath()
+    {
+        // Override this method to implement custom death behavior
+        Debug.Log(Name + " has been defeated!");
     }
 }
