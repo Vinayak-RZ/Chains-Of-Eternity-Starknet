@@ -11,7 +11,7 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();
-
+        player.Invincibilty(true);// Make player invincible during dash
         // Not enough energy? Go back to previous state
         if (player.currentEnergy < player.dashEnergyCost)
         {
@@ -20,9 +20,12 @@ public class PlayerDashState : PlayerState
             return;
         }
 
+        player.Animator.SetBool("dashing", true);
+        player.Animator.SetBool("walking", false);
+        player.Animator.SetBool("walkingUp", false);
+        player.Animator.SetBool("walkingDown", false);
         // Consume energy
         player.UseEnergy(player.dashEnergyCost);
-        player.PlayAnimation("Dash");
         moveInput = InputManager.Instance.MoveDirection.normalized;
         if (moveInput == Vector2.zero)
             moveInput = player.IsFacingRight ? Vector2.right : Vector2.left;
@@ -33,9 +36,11 @@ public class PlayerDashState : PlayerState
         player.StartCoroutine(DashCooldown());
     }
     public override void Exit()
-    {
+    {   
         base.Exit();
-        player.PlayAnimation("Idle"); // Reset animation to idle after dash
+        player.Animator.SetBool("dashing", false);
+        player.Invincibilty(false); // Disable invincibility after dash
+
     }
     public override void LogicUpdate()
     {
