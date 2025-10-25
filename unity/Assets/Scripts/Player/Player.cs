@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     public PlayerStunState stunState { get; private set; }
     public PlayerAttackState attackState { get; private set; } 
     public PlayerNoAttackState noAttackState { get; private set; } 
+    public PlayerSpellState spellState { get; private set; } // For future use, e.g., casting spells
 
     // public PlayerAttackState attackState { get; private set; } // for future
 
@@ -72,8 +73,9 @@ public class Player : MonoBehaviour
         moveState = new PlayerMoveState(this, stateMachine);
         dashState = new PlayerDashState(this, stateMachine);
         stunState = new PlayerStunState(this, stateMachine);
-        attackState = new PlayerAttackState(this, AttackStateMachine); 
+        attackState = new PlayerAttackState(this, AttackStateMachine);
         noAttackState = new PlayerNoAttackState(this, AttackStateMachine);
+        spellState = new PlayerSpellState(this, stateMachine); 
     }
     private void Start()
     {
@@ -82,6 +84,9 @@ public class Player : MonoBehaviour
     }   
     private void Update()
     {
+
+        Debug.Log(AttackStateMachine.CurrentState.ToString());
+
         stateMachine.HandleInput();
         stateMachine.LogicUpdate();
         AttackStateMachine.HandleInput();
@@ -120,7 +125,7 @@ public class Player : MonoBehaviour
             if (shouldFlip)
             {
                 IsFacingRight = !IsFacingRight;
-                transform.Rotate(0f, 180f, 0f);
+                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             }
         }
     }
