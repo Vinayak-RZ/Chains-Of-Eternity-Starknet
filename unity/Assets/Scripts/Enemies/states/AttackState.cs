@@ -13,7 +13,7 @@ public class AttackState : BaseEnemyState
     public override void Enter()
     {
         StopMoving();
-        attackTimer = 100f;   
+        attackTimer = 100f;
         attackCooldown = owner.AttackCooldown;
         isAnimationTriggered = false;
         //owner.animator.SetBool("isAttacking", true);
@@ -28,15 +28,18 @@ public class AttackState : BaseEnemyState
 
     public override void LogicUpdate()
     {
+        
         if (!owner.CanSeePlayer())
         {
+            //Debug.Log("Shifting from attack to free roaming state");
             stateMachine.ChangeState(owner.FreeRoamingState);
             return;
         }
 
         float distanceToPlayer = Vector2.Distance(owner.transform.position, Player.position);
-        if (distanceToPlayer > owner.AttackRange)
+        if (distanceToPlayer > owner.AttackRange && attackTimer > attackCooldown)
         {
+            //Debug.Log("Shifting from attack to follow state");
             stateMachine.ChangeState(owner.FollowState);
             return;
         }
@@ -44,27 +47,21 @@ public class AttackState : BaseEnemyState
 
     public override void PhysicsUpdate()
     {
+        StopMoving();
         base.PhysicsUpdate();
 
         attackTimer += Time.fixedDeltaTime;
          Vector2 directionToPlayer = (Player.position - owner.transform.position).normalized;
-        // if (owner.IsFacingRight && directionToPlayer.x < 0 || !owner.IsFacingRight && directionToPlayer.x > 0)
-        // {
-        //     return; //Skip attack if the enemy is not facing the player
-        // }
-
-        if (attackTimer <= attackCooldown && attackTimer>0.8f) // Adjust the timing as needed
+        if (owner.IsFacingRight && directionToPlayer.x < 0 || !owner.IsFacingRight && directionToPlayer.x > 0)
         {
-            // Prepare the animation slightly before the attack executes
-            owner.animator.SetBool("isAttacking", false);
-            owner.animator.SetBool("followPlayer", true);
-            isAnimationTriggered = true;
+            owner.Flip();
         }
-        else if (attackTimer >= attackCooldown)
+        if (attackTimer >= attackCooldown)
         {
             attackTimer = 0f;
             // Disable attack animation until next trigger
             owner.animator.SetBool("isAttacking", true);
+            owner.animator.SetBool("freeRoam", false);
             owner.animator.SetBool("followPlayer", false);
             isAnimationTriggered = false;
         }
