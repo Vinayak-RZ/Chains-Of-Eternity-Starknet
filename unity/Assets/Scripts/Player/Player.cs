@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class Player : MonoBehaviour
@@ -50,6 +51,8 @@ public class Player : MonoBehaviour
     private attackHandler attackHandler; // Reference to the attack handler script
 
     [SerializeField] private BoxCollider2D attackHitbox; // Reference to the attack hitbox GameObject
+    private BoxCollider2D upHitbox;
+    private BoxCollider2D downHitbox;
     [SerializeField] private LayerMask enemyLayer;
     private GameObject playerObject;
     public Vector2 CurrentVelocity => RB.linearVelocity;
@@ -83,6 +86,8 @@ public class Player : MonoBehaviour
         spellState = new PlayerSpellState(this, stateMachine);
 
         spawnPoint = GetComponent<Transform>();
+        upHitbox = attackHandler.upHitbox;
+        downHitbox = attackHandler.downHitbox;
     }
     private void Start()
     {
@@ -294,6 +299,24 @@ public class Player : MonoBehaviour
     public void DisableHitbox()
     {
         EnableHitboxDef(false);
+    }
+    public void EnableUpHitbox()
+    {
+        upHitbox.enabled = true;
+        ClearHitEnemies();
+    }
+    public void DisableUpHitBox()
+    {
+        upHitbox.enabled = false;
+    }
+    public void EnableDownHitbox()
+    {
+        downHitbox.enabled = true;
+        ClearHitEnemies();
+    }
+    public void DisableDownHitBox()
+    {
+        downHitbox.enabled = false;
     }
 
     public void ClearHitEnemies()

@@ -33,7 +33,7 @@ public class PlayerAttackState : PlayerState
     public void OnAttackAnimationComplete()
     {
         attackComplete = true;
-        Debug.Log("Attack animation completed.");
+        //Debug.Log("Attack animation completed.");
     }
 
     public override void Exit()
