@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BodEnemy : Enemy
@@ -18,7 +20,7 @@ public class BodEnemy : Enemy
         }
         farRange = attackRange;
         Debug.Log(farRange);
-    }
+    } 
     private void Update()
     {
         base.Update();
@@ -69,6 +71,17 @@ public class BodEnemy : Enemy
             }
         }
     }
+    public override IEnumerator FlashOnHit()
+    {
+        GameObject myself = this.gameObject;
+        SpriteRenderer spriteRenderer1 = myself.GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer1 == null) yield break; // No sprite renderer to flash
+
+        Color originalColor = spriteRenderer1.color;
+        spriteRenderer1.color = Color.red*2; // Flash color
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer1.color = Color.white; // Reset to original color
+    }
 
     private void CloseRangeAttack()
     {
@@ -102,6 +115,7 @@ public class BodEnemy : Enemy
         attackHitbox.enabled = false;
         justAttacked = true;
         animator.SetBool("closeRangeAttack", false);
+        performedAttack = true;
         // Disable the hitbox after the attack is complete
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -110,10 +124,10 @@ public class BodEnemy : Enemy
         if (collision.CompareTag("Player"))
         {
             // Logic for when the enemy collides with the player
-            Player player = collision.gameObject.GetComponent<Player>();
+            PlayerStats player = collision.gameObject.GetComponent<PlayerStats>();
             if (player != null)
             {
-                player.TakeDamage(damage, transform.position, knockbackForce: knockbackForce, applyKnockback: true, applyStun: true, damageType: "Physical");
+                player.TakeDamage(damage, transform.position, knockbackForce: knockbackForce, applyKnockback: true, applyStun: true);
             }
             // Example: Deal damage to the player or trigger an effect
         }

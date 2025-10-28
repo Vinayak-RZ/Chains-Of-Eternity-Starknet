@@ -13,44 +13,16 @@ MonoBehaviour:
   m_Name: HomingLightning
   m_EditorClassIdentifier: 
   spellName: HomingLighnting
-  element: 0
-  category: 0
-  visualPrefab: {fileID: 7655073553836920841, guid: 47f1ac48e3fe5884db93ba85c1359e56, type: 3}
-  manaCost: 20
-  cooldown: 0
-  attackSubtype: 1
+  element: 2
+  visualPrefab: {fileID: 718544881489533443, guid: 556c107e85625db41a64dd2a4350bebc, type: 3}
+  manaCost: 40
+  cooldown: 3
+  attackSubtype: 0
   attackData:
-    aoeData:
-      shape: 0
-      range: 5
-      damagePerTick: 10
-      tickInterval: 1
-      duration: 5
-    projectileData:
-      targetLayerMask:
-        serializedVersion: 2
-        m_Bits: 2048
-      delayBetweenProjectiles: 0.05
-      spawnOffsets:
-      - {x: 0, y: 0}
-      - {x: 0, y: 0.5}
-      - {x: 0, y: -0.5}
-      staggeredLaunchAngle: 0
-      numberOfProjectiles: 3
-      destroyTime: 3.5
-      projectileSpeed: 7
-      damage: 10
-      directions:
-      - {x: 1, y: 0}
-      - {x: 1, y: 0}
-      - {x: 1, y: 0}
-      movementPath: 4
+    aoeData: {fileID: 0}
+    projectileData: {fileID: 11400000, guid: 886088096ac1c2c4cab9f7e359dc9358, type: 2}
     shortRangeData:
       reachDistance: 2
       arcAngle: 90
       damage: 20
       knockbackForce: 5
-  buffData:
-    buffType: 0
-    duration: 5
-    magnitude: 1.5

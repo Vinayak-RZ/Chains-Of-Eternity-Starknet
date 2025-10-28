@@ -12,24 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04ed822466eb32b4fb4aed63b62ea411, type: 3}
   m_Name: Nawab
   m_EditorClassIdentifier: 
-  playerName: 
-  playerID: 
+  playerName: Nawab
+  playerID: 12345
   level: 1
   isBanned: 0
-  raceName: 
+  raceName: Human
   equippedItems: []
   offensiveStats:
-    damage: 5
+    damage: 15
     attackSpeed: 100
     criticalRate: 10
     criticalDamage: 50
   defensiveStats:
-    maxHealth: 100
-    defense: 5
+    maxHealth: 200
+    defense: 0
     healthRegeneration: 1
     resistances: 
   specialStats:
     maxEnergy: 100
-    energyRegeneration: 10
-    maxMana: 100
-    manaRegeneration: 10
+    energyRegeneration: 5
+    maxMana: 200
+    manaRegeneration: 5
+  statPointsAssigned:
+    constitution: 1
+    strength: 1
+    dexterity: 1
+    intelligence: 1
+    stamina: 1
+    agility: 1
+    experience: 0
+    remainingPoints: 0

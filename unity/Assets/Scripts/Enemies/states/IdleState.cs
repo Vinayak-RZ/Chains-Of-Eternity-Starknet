@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public class IdleState : BaseEnemyState
-{
+{ 
     private float idleDuration = 2f;
     private float idleTimer;
 
@@ -16,7 +16,7 @@ public class IdleState : BaseEnemyState
     {
         StopMoving();
         idleTimer = 0f;
-        //Debug.Log("Entering idle state");
+        Debug.Log("Entering idle state");
         owner.animator.SetBool("followPlayer", false);
         owner.animator.SetBool("freeRoam", false);
         owner.animator.SetBool("isAttacking", false);   
@@ -29,13 +29,15 @@ public class IdleState : BaseEnemyState
 
         if(owner.CanSeePlayer())
         {
+            Debug.Log("Player detected, transitioning to follow state");
             stateMachine.ChangeState(owner.FollowState);
         }
 
-
         if (idleTimer >= idleDuration)
         {
+            Debug.Log("Idle duration reached, transitioning to free roaming state");
             stateMachine.ChangeState(owner.FreeRoamingState);
+
         }
     }
 }

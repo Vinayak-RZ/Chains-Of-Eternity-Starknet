@@ -9150,6 +9150,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: air_362
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 587
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51d4234682e7b8843bed993949349ddc
+      internalID: 1082643402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -9457,6 +9479,7 @@ TextureImporter:
       air_36: 905012061428089290
       air_360: 1839670791
       air_361: -981057775
+      air_362: 1082643402
       air_37: -8493646274364049569
       air_38: -3408151321613737364
       air_39: -1492654525985976195
