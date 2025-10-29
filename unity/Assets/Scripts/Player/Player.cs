@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 using PurrNet;
 
 [RequireComponent(typeof(PlayerStats))]
@@ -47,6 +47,7 @@ public class Player : NetworkBehaviour
     public void UseEnergy(int amount) => Stats.UseEnergy(amount);
     [SerializeField] private LayerMask enemyLayer;
 
+    public string currentState;
     private PlayerStats stats;
 
     private void Awake()
@@ -84,6 +85,7 @@ public class Player : NetworkBehaviour
         stateMachine.LogicUpdate();
         attackStateMachine.HandleInput();
         attackStateMachine.LogicUpdate();
+        currentState = stateMachine.CurrentState.ToString();
     }
 
     private void FixedUpdate()

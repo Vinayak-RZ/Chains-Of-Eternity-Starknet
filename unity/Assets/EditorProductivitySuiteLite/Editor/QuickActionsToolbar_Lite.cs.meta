@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8c2b2b15f07cf4f3abe26395d760d9f3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 329895
+  packageName: Editor Productivity Suite Lite
+  packageVersion: 1.0.0
+  assetPath: Assets/EditorProductivitySuiteLite/Editor/QuickActionsToolbar_Lite.cs
+  uploadId: 791200

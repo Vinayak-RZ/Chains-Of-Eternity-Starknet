@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections;
+using Dojo.Starknet;
 
 public class SpellCaster : MonoBehaviour
 {
@@ -53,24 +54,31 @@ public class SpellCaster : MonoBehaviour
         SpellFactory.CastSpell(spell, transform);
         playerstats.currentMana.value -= (int)spell.manaCost;
         Cooldown = spell.cooldown;
-
+        Vector2 baseDir = GetMouseDirection(transform).normalized;
+        float angle = Mathf.Atan2(transform.position.x, transform.position.x) * Mathf.Rad2Deg;
         Debug.Log($"Casting spell from slot {index + 1}: {spell.name}, Mana cost: {spell.manaCost}, Remaining Mana: {playerstats.currentMana}");
 
         // 2. Call blockchain function in background (non-blocking)
-        _ = CallFireSpell(spell.attackData.projectileData.damage);
+        _ = CallFireSpell(spell.spell_id, angle);
     }
 
-    private async Task CallFireSpell(float damage)
+    private async Task CallFireSpell(FieldElement spell_id,float angle)
     {
         try
         {
             // This runs in the background without blocking gameplay
-            var result = await DojoActions.TakeDamage((ushort)damage);
-            Debug.Log($"Player took {damage} damage. Tx: {result.Inner}");
+            var result = await DojoActions.FireSpell(spell_id,(int)transform.position.x,(int)transform.position.y,(short)angle);
+            Debug.Log($"Fired Spell {spell_id} . Tx: {result.Inner}");
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"Error in CallFireSpell: {ex}");
         }
+    }
+        private static Vector2 GetMouseDirection(Transform caster)
+    {
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorld.z = 0f;
+        return ((Vector2)(mouseWorld - caster.position)).normalized;
     }
 }
