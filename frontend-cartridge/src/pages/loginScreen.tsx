@@ -1,76 +1,244 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import  { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { useStarknetConnect } from '../connect/useStarknetConnect.ts';
-//import desktopBg from 'react-scripts';
-//import mobileBg from '../../../assets/login-mobile.webp';
+import './loginScreen.css';
+
 interface LoginScreenProps {
   onLoginSuccess: () => void;
 }
 
-// Helper function to truncate hash
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+}
 
 export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   const { status, handleConnect, hasTriedConnect } = useStarknetConnect();
-  //const { 
-  //  txHash, 
-  //  txStatus, 
-  //  initializePlayer, 
-  //  playerExists,
-  //  completed
-  //} = useSpawnPlayer();
-  //const storePlayer = useAppStore(state => state.player);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  
+  const position = 'bottom-center';
 
- // const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
- // const position = isMobile ? 'bottom-center' : 'top-right';
-    const position = 'bottom-center';
-  // Trigger player initialization on wallet connect
+  // Generate floating particles
+  useEffect(() => {
+    const newParticles: Particle[] = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 2,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 5
+    }));
+    setParticles(newParticles);
+  }, []);
+
   useEffect(() => {
     if (status === 'connected' && hasTriedConnect) {
       console.log("Wallet connected, initializing player...");
-      
     }
   }, [status, hasTriedConnect]);
 
-  // Redirect on player exists or initialization completion
-
-    // If player exists or initialization completed successfully, redirect
-
-  // Transaction toast and success toast
-  
-  // Responsive toast positioning
-  //useEffect(() => {
-  //  //const handleResize = () => setIsMobile(window.innerWidth <= 768);
-  //  window.addEventListener('resize', handleResize);
-  //  return () => window.removeEventListener('resize', handleResize);
-  //}, []);
-
   return (
-    <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center">
+    <div className="login-container">
+      {/* Animated background gradient orbs */}
+      <div className="background-orbs">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="orb orb-1"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            x: [0, -80, 0],
+            y: [0, 100, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="orb orb-2"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, -50, 0],
+            y: [0, 80, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="orb orb-3"
+        />
+      </div>
+
+      {/* Floating particles */}
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="particle"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: particle.size,
+            height: particle.size,
+          }}
+          animate={{
+            y: [0, -100, 0],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: particle.duration,
+            repeat: Infinity,
+            delay: particle.delay,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+
+      {/* Grid pattern overlay */}
+      <div className="grid-overlay" />
+
+      {/* Main content */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="relative z-10 flex flex-col items-center"
+        initial={{ scale: 0.8, opacity: 0, y: 50 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="main-content"
       >
-        <h1 className="text-4xl md:text-5xl font-luckiest text-white mb-8 drop-shadow-lg text-center">
-          Arcane COE
-        </h1>
-        <button
+        {/* Glowing title container */}
+        <motion.div 
+          className="title-container"
+          animate={{ 
+            filter: [
+              "drop-shadow(0 0 20px rgba(139, 92, 246, 0.5))",
+              "drop-shadow(0 0 40px rgba(139, 92, 246, 0.8))",
+              "drop-shadow(0 0 20px rgba(139, 92, 246, 0.5))"
+            ]
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <h1 className="title">ARCANE</h1>
+          <motion.p 
+            className="subtitle"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          >
+            CHRONICLES OF ETERNITY
+          </motion.p>
+        </motion.div>
+
+        {/* Decorative lines */}
+        <div className="decorative-lines">
+          <motion.div 
+            className="line line-left"
+            initial={{ width: 0 }}
+            animate={{ width: 64 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          />
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="rotating-dot"
+          />
+          <motion.div 
+            className="line line-right"
+            initial={{ width: 0 }}
+            animate={{ width: 64 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          />
+        </div>
+
+        {/* Connect button */}
+        <motion.button
           onClick={handleConnect}
           disabled={status !== 'disconnected'}
-          className="btn-cr-yellow text-xl px-8 py-4 font-bold tracking-wide rounded-[10px] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`connect-button ${status !== 'disconnected' ? 'disabled' : ''}`}
+          whileHover={{ scale: status !== 'disconnected' ? 1 : 1.05 }}
+          whileTap={{ scale: status !== 'disconnected' ? 1 : 0.98 }}
         >
-          Connect
-        </button>
+          {/* Button background gradient */}
+          <div className="button-bg" />
+          
+          {/* Animated border */}
+          <motion.div
+            className="button-shine"
+            animate={{
+              x: ["-100%", "200%"],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+          
+          {/* Inner glow */}
+          <div className="button-glow" />
+          
+          <span className="button-content">
+            {status === 'connected' ? (
+              <>
+                <motion.span
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="status-dot connected"
+                />
+                CONNECTED
+              </>
+            ) : status === 'connecting' ? (
+              <>
+                <motion.span
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="spinner"
+                />
+                CONNECTING...
+              </>
+            ) : (
+              'ENTER REALM'
+            )}
+          </span>
+        </motion.button>
+
+        {/* Status message */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="status-message"
+        >
+          Connect your wallet to begin your journey
+        </motion.p>
       </motion.div>
 
-      {/* React Hot Toast container with Tailwind styles */}
+      {/* Corner decorations */}
+      <div className="corner-decoration corner-top-left" />
+      <div className="corner-decoration corner-top-right" />
+      <div className="corner-decoration corner-bottom-left" />
+      <div className="corner-decoration corner-bottom-right" />
+
+      {/* Toast notifications */}
       <Toaster
         position={position}
         toastOptions={{
-          className: 'font-luckiest bg-cream text-dark border border-dark rounded-[5px] shadow-lg p-4',
+          className: 'custom-toast',
           success: { duration: 1500 },
         }}
       />
