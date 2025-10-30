@@ -7,7 +7,7 @@ TagManager:
   - GroundItem
   - InventoryCanvas
   - ConversationCanvas
-  - StatsCanvas
+  - Enemy
   layers:
   - Default
   - TransparentFX
