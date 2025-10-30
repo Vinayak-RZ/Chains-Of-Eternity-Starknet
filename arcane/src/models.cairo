@@ -21,6 +21,29 @@ pub enum SpellElement {
     Wind,
 }
 
+#[derive(Serde, Copy, Drop, Introspect, PartialEq, Debug, DojoStore, Default)]
+pub enum EnemyType {
+    #[default]
+    Witch,   // type 0
+    Boss,    // type 1
+}
+
+// Enemy Component
+#[derive(Copy, Drop, Serde, Debug)]
+#[dojo::model]
+pub struct Enemy {
+    #[key]
+    pub enemy_id: felt252,
+    pub enemy_type: EnemyType,
+    pub posx: i32,
+    pub posy: i32,
+    pub velocity: i16,
+    pub health: u16,
+    pub max_health: u16,
+    pub damage_per_attack: u16,
+    pub is_alive: bool,
+}
+
 // Attack Subtypes
 #[derive(Serde, Copy, Drop, Introspect, PartialEq, Debug, DojoStore, Default)]
 pub enum AttackSubtype {
